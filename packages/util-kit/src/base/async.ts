@@ -3,11 +3,15 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CancellationToken, CancellationTokenSource } from 'vs/base/common/cancellation';
-import * as errors from 'vs/base/common/errors';
-import { Emitter, Event } from 'vs/base/common/event';
-import { IDisposable, toDisposable } from 'vs/base/common/lifecycle';
-import { URI } from 'vs/base/common/uri';
+import { CancellationToken, CancellationTokenSource } from './cancellation';
+import * as errors from '../console/errors';
+import { Emitter, Event } from './event';
+import { IDisposable, toDisposable } from './lifecycle';
+// !!!
+// import { URI } from './uri';
+
+interface Thenable<T> extends PromiseLike<T> {
+}
 
 export function isThenable<T>(obj: any): obj is Promise<T> {
 	return obj && typeof (<Promise<any>>obj).then === 'function';
@@ -46,8 +50,11 @@ export function createCancelablePromise<T>(callback: (token: CancellationToken) 
 		}
 		finally(onfinally?: (() => void) | undefined | null): Promise<T> {
 			return promise.finally(onfinally);
-		}
-	};
+    }
+    get [Symbol.toStringTag](): string { 
+      return 'CancelbalePromise';
+    }
+  };
 }
 
 export function raceCancellation<T>(promise: Promise<T>, token: CancellationToken): Promise<T | undefined>;
@@ -474,24 +481,26 @@ export class Queue<T> extends Limiter<T> {
  * A helper to organize queues per resource. The ResourceQueue makes sure to manage queues per resource
  * by disposing them once the queue is empty.
  */
-export class ResourceQueue {
-	private queues: Map<string, Queue<void>> = new Map();
+// !!!
 
-	queueFor(resource: URI): Queue<void> {
-		const key = resource.toString();
-		if (!this.queues.has(key)) {
-			const queue = new Queue<void>();
-			queue.onFinished(() => {
-				queue.dispose();
-				this.queues.delete(key);
-			});
+// export class ResourceQueue {
+// 	private queues: Map<string, Queue<void>> = new Map();
 
-			this.queues.set(key, queue);
-		}
+// 	queueFor(resource: URI): Queue<void> {
+// 		const key = resource.toString();
+// 		if (!this.queues.has(key)) {
+// 			const queue = new Queue<void>();
+// 			queue.onFinished(() => {
+// 				queue.dispose();
+// 				this.queues.delete(key);
+// 			});
 
-		return this.queues.get(key)!;
-	}
-}
+// 			this.queues.set(key, queue);
+// 		}
+
+// 		return this.queues.get(key)!;
+// 	}
+// }
 
 export class TimeoutTimer implements IDisposable {
 	private _token: any;

@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { Emitter, Event } from 'vs/base/common/event';
-import { IDisposable } from 'vs/base/common/lifecycle';
+import { Emitter, Event } from './event';
+import { IDisposable } from './lifecycle';
 
 export interface CancellationToken {
 	readonly isCancellationRequested: boolean;

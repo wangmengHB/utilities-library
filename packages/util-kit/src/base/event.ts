@@ -3,10 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { onUnexpectedError } from 'vs/base/common/errors';
-import { once as onceFn } from 'vs/base/common/functional';
-import { Disposable, IDisposable, toDisposable, combinedDisposable, DisposableStore } from 'vs/base/common/lifecycle';
-import { LinkedList } from 'vs/base/common/linkedList';
+import { onUnexpectedError } from '../console/errors';
+import { once as onceFn } from './functional';
+import { Disposable, IDisposable, toDisposable, combinedDisposable, DisposableStore } from './lifecycle';
+import { LinkedList } from './linkedList';
 
 /**
  * To an event a function with one or zero parameters

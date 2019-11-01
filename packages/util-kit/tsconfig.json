@@ -1,42 +1,35 @@
 {
-  "compilerOptions": {
-    "allowJs": true,
-		"suppressImplicitAnyIndexErrors": true,
+	"compilerOptions": {
+		"noImplicitAny": true,
+		"experimentalDecorators": true,
 		"noImplicitReturns": true,
 		"noUnusedLocals": true,
 		"noImplicitThis": true,
 		"alwaysStrict": true,
 		"strictBindCallApply": true,
+		"strictNullChecks": true,
 		"forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "experimentalDecorators": true,
-    "jsx": "preserve",
-    "noImplicitAny": true,
-    "target": "es6",
-    "module": "commonjs",
+		"baseUrl": ".",
+		"noEmit": true,
+		"types": [],
+		"paths": {},
+		"module": "amd",
+		"moduleResolution": "classic",
+		"removeComments": false,
+		"preserveConstEnums": true,
+    "declaration": true,
     "lib": [
       "dom",
-      "es7",
-      "es2015.iterable"
+      "es2020"
     ],
-    "removeComments": true,
-		"preserveConstEnums": true,
-		"sourceMap": false,
-    "outDir": "../out",
-    "moduleResolution": "node",
-    "baseUrl": ".",
-    "paths": {
-			"src/*": ["src/*"]
-		},
-  },
-  "include": [
-    "**/*.ts",
-    "./test/**/*",
+    "target": "es5",
+		"sourceMap": false, 
+    "outDir": "./lib"
+	},
+	"include": [
+		"src/base/*",
 	],
-  "exclude": [
-    "node_modules",
-    "lib",
-    "es",
-  ]
+	"exclude": [
+		"node_modules/*"
+	]
 }
