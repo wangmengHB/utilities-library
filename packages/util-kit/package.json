@@ -12,7 +12,7 @@
   "scripts": {
     "build": "rm -rf dist && tsc",
     "prepublish": "npm run build",
-    "test": "mocha --ui tdd"
+    "test": "NODE_PATH=./ mocha --ui tdd"
   },
   "repository": {
     "type": "git",

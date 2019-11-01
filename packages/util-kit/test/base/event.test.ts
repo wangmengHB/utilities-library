@@ -3,10 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import * as assert from 'assert';
-import { Event, Emitter, EventBufferer, EventMultiplexer, AsyncEmitter, IWaitUntil, PauseableEmitter } from '../lib/base/event';
-import { IDisposable, DisposableStore } from '../lib/base/lifecycle';
-import * as Errors from '../lib/debug/errors';
-import { timeout } from '../lib/base/async';
+import { Event, Emitter, EventBufferer, EventMultiplexer, AsyncEmitter, IWaitUntil, PauseableEmitter } from 'lib/base/event';
+import { IDisposable, DisposableStore } from 'lib/base/lifecycle';
+import * as Errors from 'lib/debug/errors';
+import { timeout } from 'lib/base/async';
 
 namespace Samples {
 

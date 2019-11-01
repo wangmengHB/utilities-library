@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import * as assert from 'assert';
-import * as strings from '../lib/base/strings';
+import * as strings from 'lib/base/strings';
 
 suite('Strings', () => {
 	test('equalsIgnoreCase', () => {

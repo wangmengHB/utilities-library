@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as assert from 'assert';
-import * as collections from '../lib/base/collections';
+import * as collections from 'lib/base/collections';
 
 
 suite('Collections', () => {

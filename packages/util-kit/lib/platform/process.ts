@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { isWindows, isMacintosh, setImmediate, IProcessEnvironment } from 'vs/base/common/platform';
+import { isWindows, isMacintosh, setImmediate, IProcessEnvironment } from './platform';
 
 interface IProcess {
 	platform: string;

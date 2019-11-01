@@ -9,12 +9,13 @@
 		"strictBindCallApply": true,
 		"strictNullChecks": true,
 		"forceConsistentCasingInFileNames": true,
-		// "noEmit": true,
     // "types": [],
     "baseUrl": ".",
+		"paths": {
+      "lib/*": ["./lib/*"]
+    },
 		"module": "commonjs",
-		"moduleResolution": "classic",
-		
+		"moduleResolution": "node",	
 		"preserveConstEnums": true, 
     "lib": [
       "dom",
@@ -27,7 +28,7 @@
     "outDir": "./dist"
 	},
 	"include": [
-    "./lib/base/**/*",
+    "./lib/**/*"
 	],
 	"exclude": [
     "node_modules/*",

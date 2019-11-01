@@ -4,10 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as assert from 'assert';
-import * as async from '../lib/base/async';
-import { isPromiseCanceledError } from '../lib/debug/errors';
+import * as async from 'lib/base/async';
+import { isPromiseCanceledError } from 'lib/debug/errors';
 // !!!
-// import { URI } from '../lib/base/uri';
+// import { URI } from 'lib/base/uri';
 
 suite('Async', () => {
 

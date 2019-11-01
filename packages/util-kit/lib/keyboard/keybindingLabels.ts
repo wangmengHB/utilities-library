@@ -3,8 +3,16 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as nls from 'vs/nls';
-import { OperatingSystem } from 'vs/base/common/platform';
+// import * as nls from 'vs/nls';
+import { OperatingSystem } from '../platform/platform';
+
+
+// mock nls
+
+const nls = {
+  localize: (item: object, value: string) => value,
+}
+
 
 export interface ModifierLabels {
 	readonly ctrlKey: string;
