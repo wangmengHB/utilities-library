@@ -10,7 +10,9 @@
     "lib"
   ],
   "scripts": {
-    "build": "rm -rf lib && rm -rf dist && tsc -declaration"
+    "build": "rm -rf dist && tsc",
+    "prepublish": "npm run build",
+    "test": "mocha --ui tdd"
   },
   "repository": {
     "type": "git",
@@ -27,7 +29,11 @@
   },
   "homepage": "https://github.com/wangmengHB/dora-kit#readme",
   "devDependencies": {
+    "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.3",
+    "mocha": "^6.2.2",
+    "mocha-junit-reporter": "^1.23.1",
+    "ts-node": "^8.4.1",
     "typescript": "^3.6.4"
   }
 }

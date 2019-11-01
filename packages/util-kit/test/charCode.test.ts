@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as assert from 'assert';
-import { CharCode } from 'vs/base/common/charCode';
+import { CharCode } from '../lib/keyboard/charCode';
 
 suite('CharCode', () => {
 	test('has good values', () => {

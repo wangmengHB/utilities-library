@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as assert from 'assert';
-import { LinkedList } from 'vs/base/common/linkedList';
+import { LinkedList } from '../lib/base/linkedList';
 
 suite('LinkedList', function () {
 

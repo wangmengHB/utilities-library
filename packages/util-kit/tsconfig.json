@@ -9,27 +9,28 @@
 		"strictBindCallApply": true,
 		"strictNullChecks": true,
 		"forceConsistentCasingInFileNames": true,
-		"baseUrl": ".",
-		"noEmit": true,
-		"types": [],
-		"paths": {},
-		"module": "amd",
+		// "noEmit": true,
+    // "types": [],
+    "baseUrl": ".",
+		"module": "commonjs",
 		"moduleResolution": "classic",
-		"removeComments": false,
-		"preserveConstEnums": true,
-    "declaration": true,
+		
+		"preserveConstEnums": true, 
     "lib": [
       "dom",
       "es2020"
     ],
+    "declaration": true,
     "target": "es5",
+    "removeComments": false,
 		"sourceMap": false, 
-    "outDir": "./lib"
+    "outDir": "./dist"
 	},
 	"include": [
-		"src/base/*",
+    "./lib/base/**/*",
 	],
 	"exclude": [
-		"node_modules/*"
+    "node_modules/*",
+    "./lib/__other/**/*",
 	]
 }

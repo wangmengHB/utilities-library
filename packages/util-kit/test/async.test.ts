@@ -4,9 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as assert from 'assert';
-import * as async from 'vs/base/common/async';
-import { isPromiseCanceledError } from 'vs/base/common/errors';
-import { URI } from 'vs/base/common/uri';
+import * as async from '../lib/base/async';
+import { isPromiseCanceledError } from '../lib/debug/errors';
+// !!!
+// import { URI } from '../lib/base/uri';
 
 suite('Async', () => {
 
@@ -509,28 +510,28 @@ suite('Async', () => {
 		});
 	});
 
-	test('ResourceQueue - simple', function () {
-		let queue = new async.ResourceQueue();
+	// test('ResourceQueue - simple', function () {
+	// 	let queue = new async.ResourceQueue();
 
-		const r1Queue = queue.queueFor(URI.file('/some/path'));
+	// 	const r1Queue = queue.queueFor(URI.file('/some/path'));
 
-		r1Queue.onFinished(() => console.log('DONE'));
+	// 	r1Queue.onFinished(() => console.log('DONE'));
 
-		const r2Queue = queue.queueFor(URI.file('/some/other/path'));
+	// 	const r2Queue = queue.queueFor(URI.file('/some/other/path'));
 
-		assert.ok(r1Queue);
-		assert.ok(r2Queue);
-		assert.equal(r1Queue, queue.queueFor(URI.file('/some/path'))); // same queue returned
+	// 	assert.ok(r1Queue);
+	// 	assert.ok(r2Queue);
+	// 	assert.equal(r1Queue, queue.queueFor(URI.file('/some/path'))); // same queue returned
 
-		let syncPromiseFactory = () => Promise.resolve(undefined);
+	// 	let syncPromiseFactory = () => Promise.resolve(undefined);
 
-		r1Queue.queue(syncPromiseFactory);
+	// 	r1Queue.queue(syncPromiseFactory);
 
-		return new Promise(c => setTimeout(() => c(), 0)).then(() => {
-			const r1Queue2 = queue.queueFor(URI.file('/some/path'));
-			assert.notEqual(r1Queue, r1Queue2); // previous one got disposed after finishing
-		});
-	});
+	// 	return new Promise(c => setTimeout(() => c(), 0)).then(() => {
+	// 		const r1Queue2 = queue.queueFor(URI.file('/some/path'));
+	// 		assert.notEqual(r1Queue, r1Queue2); // previous one got disposed after finishing
+	// 	});
+	// });
 
 	test('retry - success case', async () => {
 		let counter = 0;

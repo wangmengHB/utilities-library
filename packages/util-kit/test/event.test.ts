@@ -3,10 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import * as assert from 'assert';
-import { Event, Emitter, EventBufferer, EventMultiplexer, AsyncEmitter, IWaitUntil, PauseableEmitter } from 'vs/base/common/event';
-import { IDisposable, DisposableStore } from 'vs/base/common/lifecycle';
-import * as Errors from 'vs/base/common/errors';
-import { timeout } from 'vs/base/common/async';
+import { Event, Emitter, EventBufferer, EventMultiplexer, AsyncEmitter, IWaitUntil, PauseableEmitter } from '../lib/base/event';
+import { IDisposable, DisposableStore } from '../lib/base/lifecycle';
+import * as Errors from '../lib/debug/errors';
+import { timeout } from '../lib/base/async';
 
 namespace Samples {
 
@@ -47,7 +47,7 @@ suite('Event', function () {
 
 		let doc = new Samples.Document3();
 
-		document.createElement('div').onclick = function () { };
+		// document.createElement('div').onclick = function () { };
 		let subscription = doc.onDidChange(counter.onEvent, counter);
 
 		doc.setText('far');
