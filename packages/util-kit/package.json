@@ -1,10 +1,10 @@
 {
-  "name": "dora-kit",
+  "name": "util-kit",
   "version": "0.0.0-rc.1",
   "description": "this is an util library full of collection from other awesome open source project.",
-  "main": "dist/dora-kit.js",
-  "module": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "files": [
     "dist",
     "lib"
@@ -16,18 +16,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wangmengHB/dora-kit.git"
+    "url": "git+https://github.com/wangmengHB/util-kit.git"
   },
   "keywords": [
-    "util",
-    "dora-kit"
+    "utils",
+    "util"
   ],
   "author": "Meng Wang <wangmeng_hb@163.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wangmengHB/dora-kit/issues"
+    "url": "https://github.com/wangmengHB/util-kit/issues"
   },
-  "homepage": "https://github.com/wangmengHB/dora-kit#readme",
+  "homepage": "https://github.com/wangmengHB/util-kit#readme",
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.3",
