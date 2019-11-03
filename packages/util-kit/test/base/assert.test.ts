@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import * as assert from 'assert';
-import { ok } from 'lib/debug/assert';
+import { ok } from 'src/debug/assert';
 
 suite('Assert', () => {
 	test('ok', () => {

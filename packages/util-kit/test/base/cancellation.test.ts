@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import * as assert from 'assert';
-import { CancellationTokenSource, CancellationToken } from 'lib/base/cancellation';
+import { CancellationTokenSource, CancellationToken } from 'src/base/cancellation';
 
 suite('CancellationToken', function () {
 

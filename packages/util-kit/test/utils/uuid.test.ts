@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import * as assert from 'assert';
-import * as uuid from 'lib/utils/uuid';
+import * as uuid from 'src/utils/uuid';
 
 suite('UUID', () => {
 	test('generation', () => {

@@ -12,15 +12,15 @@
     // "types": [],
     "baseUrl": ".",
 		"paths": {
-      "lib/*": ["./lib/*"]
-    },
-		"module": "commonjs",
+      "src/*": ["./src/*"]
+    },	
 		"moduleResolution": "node",	
 		"preserveConstEnums": true, 
     "lib": [
       "dom",
       "es2020"
     ],
+    // "module": "es6",
     "declaration": true,
     "target": "es5",
     "removeComments": false,
@@ -28,7 +28,7 @@
     "outDir": "./dist"
 	},
 	"include": [
-    "./lib/**/*"
+    "./src/**/*"
 	],
 	"exclude": [
     "node_modules/*",

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import * as assert from 'assert';
-import * as arrays from 'lib/base/arrays';
+import * as arrays from 'src/base/arrays';
 
 
 suite('Arrays', () => {

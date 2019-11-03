@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as assert from 'assert';
-import { Iterator } from 'lib/base/iterator';
+import { Iterator } from 'src/base/iterator';
 
 suite('Iterator', () => {
 	test('concat', () => {

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import * as assert from 'assert';
-import { hash } from 'lib/utils/hash';
+import { hash } from 'src/utils/hash';
 
 suite('Hash', () => {
 	test('string', () => {
