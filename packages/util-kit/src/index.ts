@@ -4,8 +4,8 @@ import * as strings from './base/strings';
 import * as arrays from './base/arrays';
 import * as dates from './base/date';
 import * as asyncs from './base/async';
-import { LinkedList } from './base/linkedList';
-import { 
+export { LinkedList } from './base/linkedList';
+export { 
   Event, Emitter, PauseableEmitter, AsyncEmitter, 
   EventMultiplexer, EventBufferer, IWaitUntil
 } from './base/event';
@@ -14,7 +14,7 @@ import {
 } from './base/lifecycle';
 import { URI } from './base/uri';
 
-import { 
+export { 
   KeyCode, KeyCodeUtils, KeyMod, SimpleKeybinding,
   ChordKeybinding, KeyChord,  Keybinding, createKeybinding
 } from './keybinding/keyCodes';
@@ -22,7 +22,7 @@ import { CharCode } from './keybinding/charCode';
 
 import { onUnexpectedError } from './debug/errors';
 
-import { Schemas, RemoteAuthorities } from './base/network';
+export { Schemas, RemoteAuthorities } from './base/network';
 
 
 export {
@@ -32,25 +32,25 @@ export {
   dates,
   asyncs,
 
-  LinkedList,
+  // LinkedList,
 
-  Event, Emitter, 
-  PauseableEmitter, AsyncEmitter, 
-  EventMultiplexer, EventBufferer,
-  IWaitUntil,
+  // Event, Emitter, 
+  // PauseableEmitter, AsyncEmitter, 
+  // EventMultiplexer, EventBufferer,
+  // IWaitUntil,
 
   IDisposable, Disposable, toDisposable,
 
   URI,
 
   CharCode,
-  KeyCode, KeyCodeUtils, KeyMod, SimpleKeybinding,
-  ChordKeybinding, KeyChord,  Keybinding, createKeybinding,
+  // KeyCode, KeyCodeUtils, KeyMod, SimpleKeybinding,
+  // ChordKeybinding, KeyChord,  Keybinding, createKeybinding,
 
 
   onUnexpectedError,
 
-  Schemas, RemoteAuthorities
+  // Schemas, RemoteAuthorities
 
 };
 
