@@ -28,9 +28,9 @@
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import * as assert from 'assert';
-import * as path from '../lib/base/path';
-import { isWindows } from '../lib/base/platform';
-import * as process from '../lib/base/process';
+import * as path from 'src/base/path';
+import { isWindows } from 'src/platform/platform';
+import * as process from 'src/platform/process';
 
 suite('Paths (Node Implementation)', () => {
 	test('join', () => {
@@ -176,8 +176,10 @@ suite('Paths (Node Implementation)', () => {
 	});
 
 	test('dirname', () => {
-		assert.strictEqual(path.dirname(path.normalize(__filename)).substr(-11),
-			isWindows ? 'test\\common' : 'test/common');
+    console.log(path.dirname(path.normalize(__filename)));
+    console.log(path.dirname(path.normalize(__filename)).substr(-9));
+		assert.strictEqual(path.dirname(path.normalize(__filename)).substr(-9),
+			isWindows ? 'test\\base' : 'test/base');
 
 		assert.strictEqual(path.posix.dirname('/a/b/'), '/a');
 		assert.strictEqual(path.posix.dirname('/a/b'), '/a');
@@ -264,7 +266,7 @@ suite('Paths (Node Implementation)', () => {
 		const slashRE = /\//g;
 
 		[
-			[__filename, '.js'],
+			[__filename, '.ts'],
 			['', ''],
 			['/path/to/file', ''],
 			['/path/to/file.ext', '.ext'],
@@ -438,8 +440,8 @@ suite('Paths (Node Implementation)', () => {
 	});
 
 	test('basename', () => {
-		assert.strictEqual(path.basename(__filename), 'path.test.js');
-		assert.strictEqual(path.basename(__filename, '.js'), 'path.test');
+		assert.strictEqual(path.basename(__filename), 'path.test.ts');
+		assert.strictEqual(path.basename(__filename, '.ts'), 'path.test');
 		assert.strictEqual(path.basename('.js', '.js'), '');
 		assert.strictEqual(path.basename(''), '');
 		assert.strictEqual(path.basename('/dir/basename.ext'), 'basename.ext');

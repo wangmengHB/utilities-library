@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 // import * as nls from 'vs/nls';
-import { OperatingSystem } from '../platform/platform';
+import { OperatingSystem } from '../platform';
 
 
 // mock nls

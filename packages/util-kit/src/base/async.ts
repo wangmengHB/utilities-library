@@ -7,8 +7,7 @@ import { CancellationToken, CancellationTokenSource } from './cancellation';
 import * as errors from '../debug/errors';
 import { Emitter, Event } from './event';
 import { IDisposable, toDisposable } from './lifecycle';
-// !!!
-// import { URI } from './uri';
+import { URI } from './uri';
 
 interface Thenable<T> extends PromiseLike<T> {
 }
@@ -481,26 +480,25 @@ export class Queue<T> extends Limiter<T> {
  * A helper to organize queues per resource. The ResourceQueue makes sure to manage queues per resource
  * by disposing them once the queue is empty.
  */
-// !!!
 
-// export class ResourceQueue {
-// 	private queues: Map<string, Queue<void>> = new Map();
+export class ResourceQueue {
+	private queues: Map<string, Queue<void>> = new Map();
 
-// 	queueFor(resource: URI): Queue<void> {
-// 		const key = resource.toString();
-// 		if (!this.queues.has(key)) {
-// 			const queue = new Queue<void>();
-// 			queue.onFinished(() => {
-// 				queue.dispose();
-// 				this.queues.delete(key);
-// 			});
+	queueFor(resource: URI): Queue<void> {
+		const key = resource.toString();
+		if (!this.queues.has(key)) {
+			const queue = new Queue<void>();
+			queue.onFinished(() => {
+				queue.dispose();
+				this.queues.delete(key);
+			});
 
-// 			this.queues.set(key, queue);
-// 		}
+			this.queues.set(key, queue);
+		}
 
-// 		return this.queues.get(key)!;
-// 	}
-// }
+		return this.queues.get(key)!;
+	}
+}
 
 export class TimeoutTimer implements IDisposable {
 	private _token: any;

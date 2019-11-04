@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { isWindows } from 'vs/base/common/platform';
-import { CharCode } from 'vs/base/common/charCode';
+import { isWindows } from '../platform';
+import { CharCode } from '../keybinding/charCode';
 
 const _schemePattern = /^\w[\w\d+.-]*$/;
 const _singleSlashStart = /^\//;

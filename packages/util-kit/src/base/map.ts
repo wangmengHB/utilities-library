@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { URI } from 'vs/base/common/uri';
-import { CharCode } from 'vs/base/common/charCode';
+import { URI } from './uri';
+import { CharCode } from '../keybinding/charCode';
 import { Iterator, IteratorResult, FIN } from './iterator';
 
 

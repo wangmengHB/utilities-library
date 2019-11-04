@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ChordKeybinding, KeyCodeUtils, Keybinding, SimpleKeybinding } from './keyCodes';
-import { OperatingSystem } from '../platform/platform';
+import { OperatingSystem } from '../platform';
 import { ScanCodeBinding, ScanCodeUtils } from './scanCode';
 
 export class KeybindingParser {

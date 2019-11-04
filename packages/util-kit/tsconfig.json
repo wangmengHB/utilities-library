@@ -1,4 +1,5 @@
 {
+  "compileOnSave": true,
 	"compilerOptions": {
 		"noImplicitAny": true,
 		"experimentalDecorators": true,
@@ -9,11 +10,10 @@
 		"strictBindCallApply": true,
 		"strictNullChecks": true,
 		"forceConsistentCasingInFileNames": true,
-    // "types": [],
     "baseUrl": ".",
 		"paths": {
       "src/*": ["./src/*"]
-    },	
+    },
 		"moduleResolution": "node",	
 		"preserveConstEnums": true, 
     "lib": [

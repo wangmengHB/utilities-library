@@ -3,10 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { isWindows } from 'vs/base/common/platform';
-import { startsWithIgnoreCase, equalsIgnoreCase, endsWith, rtrim } from 'vs/base/common/strings';
-import { CharCode } from 'vs/base/common/charCode';
-import { sep, posix, isAbsolute, join, normalize } from 'vs/base/common/path';
+import { isWindows } from '../platform/platform';
+import { startsWithIgnoreCase, equalsIgnoreCase, endsWith, rtrim } from './strings';
+import { CharCode } from '../keybinding/charCode';
+import { sep, posix, isAbsolute, join, normalize } from './path';
 
 export function isPathSeparator(code: number) {
 	return code === CharCode.Slash || code === CharCode.Backslash;

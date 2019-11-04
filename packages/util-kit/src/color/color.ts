@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CharCode } from '../keyboard/charCode';
+import { CharCode } from '../keybinding/charCode';
 
 function roundFloat(number: number, decimalPoints: number): number {
 	const decimal = Math.pow(10, decimalPoints);

@@ -3,10 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ResourceMap, TernarySearchTree, PathIterator, StringIterator, LinkedMap, Touch, LRUCache, mapToSerializable, serializableToMap } from '../lib/base/map';
+import { ResourceMap, TernarySearchTree, PathIterator, StringIterator, LinkedMap, Touch, LRUCache, mapToSerializable, serializableToMap } from 'src/base/map';
 import * as assert from 'assert';
-import { URI } from '../lib/base/uri';
-import { IteratorResult } from '../lib/base/iterator';
+import { URI } from 'src/base/uri';
+import { IteratorResult } from 'src/base/iterator';
 
 suite('Map', () => {
 

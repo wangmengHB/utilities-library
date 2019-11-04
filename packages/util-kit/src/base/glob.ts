@@ -3,13 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as arrays from 'vs/base/common/arrays';
-import * as strings from 'vs/base/common/strings';
-import * as extpath from 'vs/base/common/extpath';
-import * as paths from 'vs/base/common/path';
-import { LRUCache } from 'vs/base/common/map';
-import { CharCode } from 'vs/base/common/charCode';
-import { isThenable } from 'vs/base/common/async';
+import * as arrays from './arrays';
+import * as strings from './strings';
+import * as extpath from './extpath';
+import * as paths from './path';
+import { LRUCache } from './map';
+import { CharCode } from '../keybinding/charCode';
+import { isThenable } from './async';
 
 export interface IExpression {
 	[pattern: string]: boolean | SiblingClause;

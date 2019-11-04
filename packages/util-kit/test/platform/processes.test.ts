@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as assert from 'assert';
-import * as processes from '../lib/base/processes';
+import {platform} from 'src/index.ts';
 
 suite('Processes', () => {
 	test('sanitizeProcessEnvironment', () => {
@@ -25,8 +25,9 @@ suite('Processes', () => {
 			VSCODE_PID: 'x',
 			VSCODE_NODE_CACHED_DATA_DIR: 'x',
 			VSCODE_NEW_VAR: 'x'
-		};
-		processes.sanitizeProcessEnvironment(env);
+    };
+    platform.sanitizeProcessEnvironment(env);
+    console.log('env', env);
 		assert.equal(env['FOO'], 'bar');
 		assert.equal(Object.keys(env).length, 1);
 	});

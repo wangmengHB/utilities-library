@@ -45,7 +45,12 @@ interface INavigator {
 declare const navigator: INavigator;
 declare const self: any;
 
-const isElectronRenderer = (typeof process !== 'undefined' && typeof process.versions !== 'undefined' && typeof process.versions.electron !== 'undefined' && process.type === 'renderer');
+const isElectronRenderer = (
+  typeof process !== 'undefined' && 
+  typeof process.versions !== 'undefined' && 
+  typeof process.versions.electron !== 'undefined' && 
+  process.type === 'renderer'
+);
 
 // OS detection
 if (typeof navigator === 'object' && !isElectronRenderer) {

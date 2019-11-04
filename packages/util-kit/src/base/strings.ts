@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CharCode } from '../keyboard/charCode';
+import { CharCode } from '../keybinding/charCode';
 import { Constants } from './uint';
 
 export function isFalsyOrWhitespace(str: string | undefined): boolean {
