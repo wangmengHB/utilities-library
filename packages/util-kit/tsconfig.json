@@ -20,7 +20,7 @@
       "dom",
       "es2020"
     ],
-    // "module": "es6",
+    "module": "commonjs",
     "declaration": true,
     "target": "es5",
     "removeComments": false,
