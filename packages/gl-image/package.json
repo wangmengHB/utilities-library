@@ -1,0 +1,33 @@
+{
+  "name": "gl-image-filter",
+  "version": "0.0.0-rc.1",
+  "description": "image filter utils based on webgl",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangmengHB/gl-image-filter.git"
+  },
+  "keywords": [
+    "image",
+    "filter",
+    "webgl"
+  ],
+  "author": "Meng Wang <wangmeng_hb@163.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wangmengHB/gl-image-filter/issues"
+  },
+  "homepage": "https://github.com/wangmengHB/gl-image-filter#readme",
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.3",
+    "mocha": "^6.2.2",
+    "mocha-junit-reporter": "^1.23.1",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4",
+    "rimraf": "^2.2.8"
+  }
+}
