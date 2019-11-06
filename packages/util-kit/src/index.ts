@@ -36,6 +36,7 @@ import * as objects from './base/objects';
 import * as dates from './base/date';
 import * as asyncs from './base/async';
 import * as decorators from './base/decorators';
+import * as numbers from './base/numbers';
 
 
 export {
@@ -43,6 +44,7 @@ export {
   strings,
   arrays,
   dates,
+  numbers,
   objects,
   asyncs,
   decorators,

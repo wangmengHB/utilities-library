@@ -1,6 +1,6 @@
 {
   "name": "util-kit",
-  "version": "0.0.0-rc.5",
+  "version": "0.0.0-rc.6",
   "description": "this is an util library full of collection from other awesome open source project.",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -34,6 +34,7 @@
     "mocha": "^6.2.2",
     "mocha-junit-reporter": "^1.23.1",
     "ts-node": "^8.4.1",
-    "typescript": "^3.6.4"
+    "typescript": "^3.6.4",
+    "rimraf": "^2.2.8"
   }
 }
