@@ -1,6 +1,6 @@
 {
   "name": "gl-image",
-  "version": "0.0.0-rc.1",
+  "version": "0.0.0-rc.2",
   "description": "image filter utils based on webgl",
   "main": "lib/index.js",
   "module": "lib/index.js",
