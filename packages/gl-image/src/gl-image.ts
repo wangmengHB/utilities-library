@@ -32,26 +32,7 @@ export default class GLImage {
 
 
   constructor() {
-    this.canvas = document.createElement('canvas');
-    const glOptions = {
-      alpha: true,
-      premultipliedAlpha: false,
-      depth: false,
-      stencil: false,
-      antialias: false,
-      preserveDrawingBuffer: true
-    };
-
-    try {
-      this.gl = (
-        this.canvas.getContext('webgl', glOptions) ||
-        this.canvas.getContext('experimental-webgl', glOptions)
-      ) as WebGLRenderingContext;
-    } catch (e) {
-        throw new Error('This browser does not support WebGL');
-    }
-    this.gl.clearColor(0, 0, 0, 0);
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    this.canvas = document.createElement('canvas');  
   }
 
   getCanvas() {
@@ -66,6 +47,25 @@ export default class GLImage {
     let img: HTMLImageElement = await loadImage(src);
     this.width = this.canvas.width = img.width;
     this.height = this.canvas.height = img.height;
+    const glOptions = {
+      // alpha: true,
+      // premultipliedAlpha: false,
+      // depth: false,
+      // stencil: false,
+      // antialias: false,
+      preserveDrawingBuffer: true
+    };
+
+    try {
+      this.gl = (
+        this.canvas.getContext('webgl', glOptions) ||
+        this.canvas.getContext('experimental-webgl', glOptions)
+      ) as WebGLRenderingContext;
+    } catch (e) {
+        throw new Error('This browser does not support WebGL');
+    }
+    this.gl.clearColor(0, 0, 0, 0);
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     this.texture = initTexture(this.gl, img) as WebGLTexture;
     this.setupFilters();
     initVertex(this.gl);
