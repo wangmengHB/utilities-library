@@ -1,14 +1,21 @@
 {
-  "name": "gl-image-filter",
+  "name": "gl-image",
   "version": "0.0.0-rc.1",
   "description": "image filter utils based on webgl",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "dist",
+    "lib"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf dist && rm -rf lib && tsc --outDir './lib'",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wangmengHB/gl-image-filter.git"
+    "url": "git+https://github.com/wangmengHB/gl-image.git"
   },
   "keywords": [
     "image",
@@ -18,9 +25,9 @@
   "author": "Meng Wang <wangmeng_hb@163.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wangmengHB/gl-image-filter/issues"
+    "url": "https://github.com/wangmengHB/gl-image/issues"
   },
-  "homepage": "https://github.com/wangmengHB/gl-image-filter#readme",
+  "homepage": "https://github.com/wangmengHB/gl-image#readme",
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.3",
@@ -29,5 +36,8 @@
     "ts-node": "^8.4.1",
     "typescript": "^3.6.4",
     "rimraf": "^2.2.8"
+  },
+  "dependencies": {
+    "util-kit": "^0.0.0-rc.6"
   }
 }
