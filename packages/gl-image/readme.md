@@ -15,6 +15,7 @@ npm install --S gl-image
 ```
 ```ts
 import GLImage from 'gl-image';
+const glImage = new GLImage();
 
 glImage.loadImageSrc(src).then(() => {
   // do filter for image
