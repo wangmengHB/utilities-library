@@ -2,7 +2,7 @@ import {
   initTexture, initVertex, initFilter, initShaders,
   initFramebufferObject, setUniforms
 } from "./gl-utils"
-import { createFilter } from './filter';
+import { createFilter, SUPPORTED_FILTERS } from './filter';
 
 function loadImage(imgSrc: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
@@ -61,7 +61,11 @@ export default class GLImage {
     };
 
     if (this.gl && this.texture) {
-      this.gl.deleteTexture(this.texture);
+      this.gl.clearColor(0, 0, 0, 0);
+      this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+      this.gl.deleteTexture(this.texture); 
+      this.tempFramebuffers = [];
+      this.currentFramebufferIndex = 0;
       this.texture = null;
     }
 
@@ -74,7 +78,6 @@ export default class GLImage {
         throw new Error('This browser does not support WebGL');
     }
     
-
     this.gl.clearColor(0, 0, 0, 0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     this.texture = initTexture(this.gl, img) as WebGLTexture;
@@ -85,6 +88,8 @@ export default class GLImage {
       initFilter(this.gl, item.program);
     });
     this.draw();
+
+    return this;
   }
 
   applyFilter(type: string, value: number) {
@@ -100,9 +105,18 @@ export default class GLImage {
     this.draw();
   }
 
-  getAllFilterValues() {
+  resetFilters() {
+    const values = this.getAllFilterValues(SUPPORTED_FILTERS);
+    const types = Object.keys(values || {});
+    types.forEach((type: string) => {
+      this.updateFilterUniformValue(type, values[type]);
+    });
+  }
+
+  getAllFilterValues(filters?: any) {
     const res: any = {};
-    this.filters.forEach((item: any) => {
+    const target = filters || this.filters;
+    target.forEach((item: any) => {
       const uniforms = item.uniforms || {};
       const types = Object.keys(uniforms);
       types.forEach((type: string) => {
@@ -119,8 +133,6 @@ export default class GLImage {
     }
     return null;
   }
-
-
 
   draw(){
     this.gl.viewport(0, 0, this.width, this.height);
@@ -147,6 +159,7 @@ export default class GLImage {
   }
 
   private setupFilters() {
+    this.filters = [];
     this.filters.push(createFilter('default'));
     this.filters.push(createFilter('brightness_contrast'));
     this.filters.push(createFilter('hue_saturation'));

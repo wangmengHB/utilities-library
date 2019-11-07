@@ -1,3 +1,5 @@
 import './OES_texture_float_linear-polyfill';
 
-export { default as GLImage } from './gl-image';
+import GLImage from './gl-image';
+
+export default GLImage;

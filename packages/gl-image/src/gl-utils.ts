@@ -80,7 +80,7 @@ export function initFilter(gl: WebGLRenderingContext, program: WebGLProgram) {
 
 }
 
-let loadShader = function (gl: WebGLRenderingContext, type: number, source: string) {
+function loadShader(gl: WebGLRenderingContext, type: number, source: string) {
   // 创建着色器对象
   let shader = gl.createShader(type);
   if (shader == null) {
@@ -102,7 +102,7 @@ let loadShader = function (gl: WebGLRenderingContext, type: number, source: stri
   return shader;
 }
 
-let createProgram = function (gl: WebGLRenderingContext, vshader: string, fshader: string) {
+function createProgram(gl: WebGLRenderingContext, vshader: string, fshader: string) {
   // 创建着色器对象
   let vertexShader = loadShader(gl, gl.VERTEX_SHADER, vshader);
   let fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fshader);
@@ -159,7 +159,7 @@ export function initFramebufferObject(gl: WebGLRenderingContext, width: number, 
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
   return {
-      fbo,
-      texture
+    fbo,
+    texture
   };
 }

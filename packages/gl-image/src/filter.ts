@@ -16,7 +16,7 @@ export interface UNIFORMITEM {
 } 
 
 
-const MAP: any = Object.freeze({
+export const SUPPORTED_FILTERS: any = Object.freeze({
   'default': {
     vshader: defaultVertexSource,
     fshader: defaultFragmentSource,
@@ -54,10 +54,10 @@ const MAP: any = Object.freeze({
 
 
 export function createFilter(name: string) {
-  if (!MAP[name]) {
+  if (!SUPPORTED_FILTERS[name]) {
     return null;
   }
-  return objects.deepClone(MAP[name]);
+  return objects.deepClone(SUPPORTED_FILTERS[name]);
 }
 
 
