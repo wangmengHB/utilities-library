@@ -2,10 +2,10 @@
 gl-image is a util library based on webgl for image filter functions.   
 This project is inspired by [@evanw](https://github.com/evanw/glfx.js).
 
-Here is the main difference between glfx.js and gl-image.js:
-glfx.js just support one shader program at one time.
+Here is the main difference between glfx.js and gl-image.js:    
+glfx.js just support one shader program at one time.    
 But in many use case, we need to do multiple filters to one image, and every operation can be redoable.
-So gl-image do sth more to support multiple filters.
+So gl-image do something more to support multiple filters (multiple shader program).
 
 And it is realy simple for use.
 
