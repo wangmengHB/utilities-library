@@ -58,14 +58,14 @@ export function setUniforms(gl: WebGLRenderingContext, program: WebGLProgram, un
 
 
 export function initVertex(gl: WebGLRenderingContext) {
-  // 顶点着色器的坐标与纹理坐标的映射
-  let vertexBuffer = gl.createBuffer();
+  const vertexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
   gl.bufferData(
     gl.ARRAY_BUFFER, 
     new Float32Array([ 0, 0, 0, 1, 1, 0, 1, 1 ]), 
     gl.STATIC_DRAW
-  ); 
+  );
+  return vertexBuffer;
 }
 
 export function initFilter(gl: WebGLRenderingContext, program: WebGLProgram) {
@@ -129,20 +129,25 @@ function createProgram(gl: WebGLRenderingContext, vshader: string, fshader: stri
       gl.deleteShader(vertexShader);
       return null;
   }
-  return program;
+  return {
+    program,
+    vertexShader,
+    fragmentShader,
+  }
 }
 
 export function initShaders(gl: WebGLRenderingContext, shaderObj: any) {
   
-  var program = createProgram(gl, shaderObj.vshader, shaderObj.fshader);
-  if (!program) {
+  const result = createProgram(gl, shaderObj.vshader, shaderObj.fshader);
+  if (!result) {
       console.log('无法创建程序对象');
       return false;
   }
-
+  const { program, vertexShader, fragmentShader } = result;
   gl.useProgram(program);
   shaderObj.program = program;
-
+  shaderObj.vertexShader = vertexShader;
+  shaderObj.fragmentShader = fragmentShader;
   return true;
 }
 

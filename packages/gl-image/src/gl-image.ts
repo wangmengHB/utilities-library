@@ -29,6 +29,7 @@ export default class GLImage {
   private width: number = 0;
   private height: number = 0;
   private texture: WebGLTexture | null;
+  private vertexBuffer: WebGLBuffer | null;
   private filters: any = [];
 
   private tempFramebuffers: any[] = [];
@@ -36,7 +37,8 @@ export default class GLImage {
 
 
   constructor() {
-    this.canvas = document.createElement('canvas');  
+    this.canvas = document.createElement('canvas');
+    this.setupFilters();  
   }
 
   getCanvas() {
@@ -72,8 +74,7 @@ export default class GLImage {
     this.gl.clearColor(0, 0, 0, 0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     this.texture = initTexture(this.gl, img) as WebGLTexture;
-    this.setupFilters();
-    initVertex(this.gl);
+    this.vertexBuffer = initVertex(this.gl);
     this.filters.forEach((item: any) => {
       initShaders(this.gl as WebGLRenderingContext, item);
       initFilter(this.gl as WebGLRenderingContext, item.program);
@@ -147,6 +148,23 @@ export default class GLImage {
         this.gl.deleteTexture(this.texture);   
         this.texture = null;
       }
+      // clean programs in the filters
+      this.filters.forEach((filter: any) => {
+        if (filter.program) {
+          this.gl!.deleteProgram(filter.program);
+          filter.program = null;
+        }
+        if (filter.vertexShader) {
+          this.gl!.deleteShader(filter.vertexShader);
+          filter.vertexShader = null;
+        }
+        if (filter.fragmentShader) {
+          this.gl!.deleteShader(filter.fragmentShader);
+          filter.fragmentShader = null;
+        }
+      });
+      this.gl.deleteBuffer(this.vertexBuffer);
+      this.vertexBuffer = null;
       this.gl = null;
     }
   }
@@ -182,15 +200,14 @@ export default class GLImage {
     }  
     let source = null
     let target = null
-    // 第一次渲染时使用图片纹理
+    // first render use origin image texture
     if (index === 0) {
-      // 注意这里是在配置图像纹理中注释掉的步骤
       let u_Sampler = this.gl.getUniformLocation(program, 'texture');
       this.gl.activeTexture(this.gl.TEXTURE0);
       this.gl.uniform1i(u_Sampler, 0);
       source = this.texture;
     } else {
-      // 后续渲染都使用上一次在缓冲中存储的纹理
+      // use last rendered texture in the last framebuffer
       source = this.getTempFramebuffer(this.currentFramebufferIndex).texture;
     }
     if (index === this.filters.length - 1) {
