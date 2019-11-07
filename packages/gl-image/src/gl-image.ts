@@ -17,6 +17,10 @@ function loadImage(imgSrc: string) {
   })
 }
 
+export interface FilterValues {
+  [type: string]: number;
+}
+
 
 export default class GLImage {
 
@@ -24,7 +28,7 @@ export default class GLImage {
   private canvas: HTMLCanvasElement;
   private width: number = 0;
   private height: number = 0;
-  private texture: WebGLTexture;
+  private texture: WebGLTexture | null;
   private filters: any = [];
 
   private tempFramebuffers: any[] = [];
@@ -48,13 +52,18 @@ export default class GLImage {
     this.width = this.canvas.width = img.width;
     this.height = this.canvas.height = img.height;
     const glOptions = {
-      // alpha: true,
-      // premultipliedAlpha: false,
-      // depth: false,
-      // stencil: false,
-      // antialias: false,
+      alpha: true,
+      premultipliedAlpha: false,
+      depth: false,
+      stencil: false,
+      antialias: false,
       preserveDrawingBuffer: true
     };
+
+    if (this.gl && this.texture) {
+      this.gl.deleteTexture(this.texture);
+      this.texture = null;
+    }
 
     try {
       this.gl = (
@@ -64,6 +73,8 @@ export default class GLImage {
     } catch (e) {
         throw new Error('This browser does not support WebGL');
     }
+    
+
     this.gl.clearColor(0, 0, 0, 0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     this.texture = initTexture(this.gl, img) as WebGLTexture;
@@ -73,20 +84,58 @@ export default class GLImage {
       initShaders(this.gl, item);
       initFilter(this.gl, item.program);
     });
-
+    this.draw();
   }
 
-  private setupFilters() {
-    this.filters.push(createFilter('default'));
-    this.filters.push(createFilter('brightness_contrast'));
-    this.filters.push(createFilter('hue_saturation'));
+  applyFilter(type: string, value: number) {
+    this.updateFilterUniformValue(type, value);
+    this.draw();
   }
-  
-  filter(uniformName: string, value: number) {
+
+  applyFilters(values: FilterValues) {
+    const types = Object.keys(values || {});
+    types.forEach((type: string) => {
+      this.updateFilterUniformValue(type, values[type]);
+    });
+    this.draw();
+  }
+
+  getAllFilterValues() {
+    const res: any = {};
+    this.filters.forEach((item: any) => {
+      const uniforms = item.uniforms || {};
+      const types = Object.keys(uniforms);
+      types.forEach((type: string) => {
+        res[type] = uniforms[type].value;
+      })
+    })
+    return res;
+  }
+
+  getFilterValueByName(type: string) {
+    const all = this.getAllFilterValues();
+    if (typeof all[type] === 'number') {
+      return all[type]
+    }
+    return null;
+  }
+
+
+
+  draw(){
+    this.gl.viewport(0, 0, this.width, this.height);
+    this.filters.forEach((item: any, index: number) => {
+      this.gl.useProgram(item.program);
+      setUniforms(this.gl, item.program, item.uniforms);
+      this.drawScene(item.program as WebGLProgram, index);
+    });
+  }
+
+  private updateFilterUniformValue(type: string, value: number) {
     const target = this.filters.find((item: any) => {
-      const { uniforms } = item;
+      const uniforms = item.uniforms || {};
       const keys = Object.keys(uniforms);
-      if (keys.indexOf(uniformName) > -1) {
+      if (keys.indexOf(type) > -1) {
         return true;
       }
       return false;
@@ -94,21 +143,16 @@ export default class GLImage {
     if (!target) {
       return;
     }
-    target.uniforms[uniformName].value = value;
-    this.draw();
+    target.uniforms[type].value = value;
   }
 
-
-  draw = () => {
-    this.filters.forEach((item: any, index: number) => {
-      this.gl.useProgram(item.program);
-      setUniforms(this.gl, item.program, item.uniforms);
-  
-      this.drawScene(item.program as WebGLProgram, index);
-    });
+  private setupFilters() {
+    this.filters.push(createFilter('default'));
+    this.filters.push(createFilter('brightness_contrast'));
+    this.filters.push(createFilter('hue_saturation'));
   }
 
-  drawScene(program: WebGLProgram, index: number) {  
+  private drawScene(program: WebGLProgram, index: number) {  
     let source = null
     let target = null
     // 第一次渲染时使用图片纹理
@@ -141,15 +185,5 @@ export default class GLImage {
     );
     return this.tempFramebuffers[index]
   }
-
-
-  
-
-
-
-  
-
-  
-
 
 }
