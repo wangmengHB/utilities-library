@@ -35,10 +35,14 @@ glImage.loadImageSrc(src).then(() => {
 | vignette_amount    | 0                 | [0, 1]      | 
 | vignette_size      | 0                 | [0, 1]      | 
 
-note: default value means no filter effect.
+default value in the above table means no filter effect.
+
+###### note: 
+1. please make sure the image source url is cross-origin, otherwise browser will block reading pixels from the image. gl-image will failed to do anything.
+2. please make sure your browser supports webgl.
 
 
-# how to use
+# usage
 
 ## use case 1. simple use
 ```ts
