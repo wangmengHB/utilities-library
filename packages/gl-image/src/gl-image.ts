@@ -11,7 +11,7 @@ function loadImage(imgSrc: string) {
       resolve(img)
     }
     img.onerror = () => {
-      reject(new Error('load error'))
+      reject(new Error('image load error'))
     }
     img.src = imgSrc
   })
@@ -24,7 +24,7 @@ export interface FilterValues {
 
 export default class GLImage {
 
-  private gl: WebGLRenderingContext;
+  private gl: WebGLRenderingContext | null;
   private canvas: HTMLCanvasElement;
   private width: number = 0;
   private height: number = 0;
@@ -44,11 +44,12 @@ export default class GLImage {
   }
 
   toDataUrl() {
-    return this.canvas.toDataURL();
+    return this.canvas.toDataURL('image/png');
   }
 
   async loadImageSrc(src: string) {
-    let img: HTMLImageElement = await loadImage(src);
+    const img: HTMLImageElement = await loadImage(src);
+    this.clear();
     this.width = this.canvas.width = img.width;
     this.height = this.canvas.height = img.height;
     const glOptions = {
@@ -59,16 +60,6 @@ export default class GLImage {
       antialias: false,
       preserveDrawingBuffer: true
     };
-
-    if (this.gl && this.texture) {
-      this.gl.clearColor(0, 0, 0, 0);
-      this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-      this.gl.deleteTexture(this.texture); 
-      this.tempFramebuffers = [];
-      this.currentFramebufferIndex = 0;
-      this.texture = null;
-    }
-
     try {
       this.gl = (
         this.canvas.getContext('webgl', glOptions) ||
@@ -84,8 +75,8 @@ export default class GLImage {
     this.setupFilters();
     initVertex(this.gl);
     this.filters.forEach((item: any) => {
-      initShaders(this.gl, item);
-      initFilter(this.gl, item.program);
+      initShaders(this.gl as WebGLRenderingContext, item);
+      initFilter(this.gl as WebGLRenderingContext, item.program);
     });
     this.draw();
 
@@ -134,13 +125,30 @@ export default class GLImage {
     return null;
   }
 
-  draw(){
+  draw() {
+    if (!this.gl) {
+      return;
+    }
     this.gl.viewport(0, 0, this.width, this.height);
     this.filters.forEach((item: any, index: number) => {
-      this.gl.useProgram(item.program);
-      setUniforms(this.gl, item.program, item.uniforms);
+      (this.gl as WebGLRenderingContext).useProgram(item.program);
+      setUniforms(this.gl as WebGLRenderingContext, item.program, item.uniforms);
       this.drawScene(item.program as WebGLProgram, index);
     });
+  }
+
+  private clear() {
+    this.tempFramebuffers = [];
+    this.currentFramebufferIndex = 0;
+    if (this.gl) {
+      this.gl.clearColor(0, 0, 0, 0);
+      this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+      if (this.texture) {
+        this.gl.deleteTexture(this.texture);   
+        this.texture = null;
+      }
+      this.gl = null;
+    }
   }
 
   private updateFilterUniformValue(type: string, value: number) {
@@ -163,9 +171,15 @@ export default class GLImage {
     this.filters.push(createFilter('default'));
     this.filters.push(createFilter('brightness_contrast'));
     this.filters.push(createFilter('hue_saturation'));
+    this.filters.push(createFilter('sepia'));
+    this.filters.push(createFilter('vibrance'));
+    this.filters.push(createFilter('vignette'));
   }
 
-  private drawScene(program: WebGLProgram, index: number) {  
+  private drawScene(program: WebGLProgram, index: number) {
+    if (!this.gl) {
+      return;
+    }  
     let source = null
     let target = null
     // 第一次渲染时使用图片纹理
@@ -190,8 +204,10 @@ export default class GLImage {
     this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
   }
 
-  
   private getTempFramebuffer(index: number) {
+    if (!this.gl) {
+      return;
+    }
     this.tempFramebuffers[index] = (
       this.tempFramebuffers[index] || 
       initFramebufferObject(this.gl, this.width, this.height)

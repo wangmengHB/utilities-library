@@ -3,7 +3,9 @@ import {defaultVertexSource, defaultFragmentSource} from './glsl/default';
 import {
   GLSL_FS_brightnessContrast,
   GLSL_FS_hueSaturation,
-  // GLSL_FS_sepia,
+  GLSL_FS_sepia,
+  GLSL_FS_vibrance,
+  GLSL_FS_vignette,
 } from './glsl/adjust';
 
 export interface UNIFORMS {
@@ -49,7 +51,42 @@ export const SUPPORTED_FILTERS: any = Object.freeze({
         range: [-1, 1]
       },
     },
-  }
+  },
+  'sepia': {
+    vshader: defaultVertexSource,
+    fshader: GLSL_FS_sepia,
+    uniforms: {
+      'sepia_amount': {
+        value: 0,
+        range: [0, 1],
+      }
+    },
+  },
+  'vibrance': {
+    vshader: defaultVertexSource,
+    fshader: GLSL_FS_vibrance,
+    uniforms: {
+      'vibrance_amount': {
+        value: 0,
+        range: [-1, 1],
+      },
+    },
+  },
+  'vignette': {
+    vshader: defaultVertexSource,
+    fshader: GLSL_FS_vignette,
+    uniforms: {
+      'vignette_amount': {
+        value: 0,
+        range: [0, 1],
+      },
+      'vignette_size': {
+        value: 0,
+        range: [0, 1]
+      },
+    },
+  },
+
 });
 
 

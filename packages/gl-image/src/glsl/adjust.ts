@@ -71,12 +71,12 @@ void main() {
 /**
  * @filter         Sepia
  * @description    Gives the image a reddish-brown monochrome tint that imitates an old photograph.
- * @param amount   0 to 1 (0 for no effect, 1 for full sepia coloring)
+ * @param sepia_amount   0 to 1 (0 for no effect, 1 for full sepia coloring)
  */
 export const GLSL_FS_sepia = `
 precision highp float;
 uniform sampler2D texture;
-uniform float amount;
+uniform float sepia_amount;
 varying vec2 texCoord;
 void main() {
     vec4 color = texture2D(texture, texCoord);
@@ -84,9 +84,9 @@ void main() {
     float g = color.g;
     float b = color.b;
     
-    color.r = min(1.0, (r * (1.0 - (0.607 * amount))) + (g * (0.769 * amount)) + (b * (0.189 * amount)));
-    color.g = min(1.0, (r * 0.349 * amount) + (g * (1.0 - (0.314 * amount))) + (b * 0.168 * amount));
-    color.b = min(1.0, (r * 0.272 * amount) + (g * 0.534 * amount) + (b * (1.0 - (0.869 * amount))));
+    color.r = min(1.0, (r * (1.0 - (0.607 * sepia_amount))) + (g * (0.769 * sepia_amount)) + (b * (0.189 * sepia_amount)));
+    color.g = min(1.0, (r * 0.349 * sepia_amount) + (g * (1.0 - (0.314 * sepia_amount))) + (b * 0.168 * sepia_amount));
+    color.b = min(1.0, (r * 0.272 * sepia_amount) + (g * 0.534 * sepia_amount) + (b * (1.0 - (0.869 * sepia_amount))));
     
     gl_FragColor = color;
 }    
@@ -96,18 +96,18 @@ void main() {
 /**
  * @filter       Vibrance
  * @description  Modifies the saturation of desaturated colors, leaving saturated colors unmodified.
- * @param amount -1 to 1 (-1 is minimum vibrance, 0 is no change, and 1 is maximum vibrance)
+ * @param vibrance_amount -1 to 1 (-1 is minimum vibrance, 0 is no change, and 1 is maximum vibrance)
  */
-export const vibrance =`
+export const GLSL_FS_vibrance =`
 precision highp float;
 uniform sampler2D texture;
-uniform float amount;
+uniform float vibrance_amount;
 varying vec2 texCoord;
 void main() {
     vec4 color = texture2D(texture, texCoord);
     float average = (color.r + color.g + color.b) / 3.0;
     float mx = max(color.r, max(color.g, color.b));
-    float amt = (mx - average) * (-amount * 3.0);
+    float amt = (mx - average) * (-vibrance_amount * 3.0);
     color.rgb = mix(color.rgb, vec3(mx), amt);
     gl_FragColor = color;
 }
@@ -117,20 +117,20 @@ void main() {
 /**
  * @filter         Vignette
  * @description    Adds a simulated lens edge darkening effect.
- * @param size     0 to 1 (0 for center of frame, 1 for edge of frame)
- * @param amount   0 to 1 (0 for no effect, 1 for maximum lens darkening)
+ * @param vignette_size     0 to 1 (0 for center of frame, 1 for edge of frame)
+ * @param vignette_amount   0 to 1 (0 for no effect, 1 for maximum lens darkening)
  */
-export const vignette =`
+export const GLSL_FS_vignette =`
 precision highp float;
 uniform sampler2D texture;
-uniform float size;
-uniform float amount;
+uniform float vignette_size;
+uniform float vignette_amount;
 varying vec2 texCoord;
 void main() {
     vec4 color = texture2D(texture, texCoord);
     
     float dist = distance(texCoord, vec2(0.5, 0.5));
-    color.rgb *= smoothstep(0.8, size * 0.799, dist * (amount + size));
+    color.rgb *= smoothstep(0.8, vignette_size * 0.799, dist * (vignette_amount + vignette_size));
     
     gl_FragColor = color;
 }
