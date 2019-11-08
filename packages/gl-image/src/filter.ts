@@ -32,7 +32,7 @@ export const SUPPORTED_FILTERS: any = Object.freeze({
         value: 0,
         range: [-1, 1],
       },
-      'constrast': {
+      'contrast': {
         value: 0,
         range: [-1, 1]
       },
