@@ -98,7 +98,8 @@ export default class GLImage {
   }
 
   resetFilters() {
-    const values = this.getAllFilterValues(SUPPORTED_FILTERS);
+    const keys = Object.keys(SUPPORTED_FILTERS);
+    const values = this.getAllFilterValues(keys.map(key => SUPPORTED_FILTERS[key]));
     const types = Object.keys(values || {});
     types.forEach((type: string) => {
       this.updateFilterUniformValue(type, values[type]);
@@ -107,7 +108,7 @@ export default class GLImage {
 
   getAllFilterValues(filters?: any) {
     const res: any = {};
-    const target = filters || this.filters;
+    const target = filters || this.filters || [];
     target.forEach((item: any) => {
       const uniforms = item.uniforms || {};
       const types = Object.keys(uniforms);
