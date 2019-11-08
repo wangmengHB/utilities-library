@@ -7,7 +7,7 @@ glfx.js just support one shader program at one time.
 But in many use case, we need to do multiple filters to one image, and every operation can be redoable.
 So gl-image do something more to support multiple filters (multiple shader program).
 
-And it is realy simple for use.
+And it is really simple for use.
 
 # install
 ```bash
@@ -27,7 +27,7 @@ glImage.loadImageSrc(src).then(() => {
 | filter type name   | default value     | range       |
 | :---------         | :-------          | :---------- |
 | brightness         | 0                 | [-1, 1]     | 
-| constrast          | 0                 | [-1, 1]     | 
+| contrast          | 0                 | [-1, 1]     | 
 | hue                | 0                 | [-1, 1]     | 
 | saturation         | 0                 | [-1, 1]     | 
 | sepia_amount       | 0                 | [0, 1]      | 
