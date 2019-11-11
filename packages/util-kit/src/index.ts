@@ -1,4 +1,6 @@
 
+export * from './base/functional';
+
 
 export { LinkedList } from './base/linkedList';
 
