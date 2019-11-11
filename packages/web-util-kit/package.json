@@ -1,8 +1,14 @@
 {
   "name": "web-util-kit",
-  "version": "0.0.0-rc.1",
+  "version": "0.0.0-rc.2",
   "description": "collection of utility functions only works in web browser",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "dist",
+    "lib"
+  ],
   "scripts": {
     "build": "rm -rf dist && rm -rf lib && tsc --outDir './lib'",
     "prepublish": "npm run build"
