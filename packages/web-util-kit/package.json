@@ -1,0 +1,33 @@
+{
+  "name": "web-util-kit",
+  "version": "0.0.0-rc.1",
+  "description": "collection of utility functions only works in web browser",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf dist && rm -rf lib && tsc --outDir './lib'",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangmengHB/web-util-kit.git"
+  },
+  "keywords": [
+    "web",
+    "util"
+  ],
+  "author": "Meng Wang <wangmeng_hb@163.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wangmengHB/web-util-kit/issues"
+  },
+  "homepage": "https://github.com/wangmengHB/web-util-kit#readme",
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.3",
+    "mocha": "^6.2.2",
+    "mocha-junit-reporter": "^1.23.1",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4",
+    "rimraf": "^2.2.8"
+  }
+}

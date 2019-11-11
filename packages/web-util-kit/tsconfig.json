@@ -1,0 +1,36 @@
+{
+  "compileOnSave": true,
+	"compilerOptions": {
+		"noImplicitAny": true,
+		"experimentalDecorators": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+		"strictBindCallApply": true,
+		"strictNullChecks": true,
+		"forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+		"paths": {
+      "src/*": ["./src/*"]
+    },
+		"moduleResolution": "node",	
+		"preserveConstEnums": true, 
+    "lib": [
+      "dom",
+      "es2020"
+    ],
+    "module": "commonjs",
+    "declaration": true,
+    "target": "es5",
+    "removeComments": false,
+		"sourceMap": false, 
+    "outDir": "./dist"
+	},
+	"include": [
+    "./src/**/*"
+	],
+	"exclude": [
+    "node_modules/*",
+	]
+}
