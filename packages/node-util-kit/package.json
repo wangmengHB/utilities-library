@@ -1,0 +1,42 @@
+{
+  "name": "node-util-kit",
+  "version": "0.0.0-rc.1",
+  "description": "collection of utility function only works in node env.",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "dist",
+    "lib"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && rm -rf lib && tsc --outDir './lib'",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangmengHB/node-util-kit.git"
+  },
+  "keywords": [
+    "node",
+    "util"
+  ],
+  "author": "Meng Wang <wangmeng_hb@163.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wangmengHB/node-util-kit/issues"
+  },
+  "homepage": "https://github.com/wangmengHB/node-util-kit#readme",
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.3",
+    "mocha": "^6.2.2",
+    "mocha-junit-reporter": "^1.23.1",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4",
+    "rimraf": "^2.2.8"
+  },
+  "dependencies": {
+    "util-kit": "^0.0.0-rc.7"
+  }
+}
