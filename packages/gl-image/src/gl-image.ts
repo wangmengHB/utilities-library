@@ -49,6 +49,16 @@ export default class GLImage {
     return this.canvas.toDataURL('image/png');
   }
 
+  async fetchBlob() {
+    const p = new Promise((resolve) => {
+      this.canvas.toBlob(blob => {
+        resolve(blob);
+      })
+    })
+    const blob = await Promise.resolve(p);
+    return blob;
+  }
+
   async loadImageSrc(src: string) {
     const img: HTMLImageElement = await loadImage(src);
     this.clear();
