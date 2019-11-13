@@ -38,6 +38,7 @@
     "rimraf": "^2.2.8"
   },
   "dependencies": {
-    "util-kit": "^0.0.0-rc.6"
+    "util-kit": "^0.0.0-rc.6",
+    "web-util-kit": "^0.0.0-rc.2"
   }
 }

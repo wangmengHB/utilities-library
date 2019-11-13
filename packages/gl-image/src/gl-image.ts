@@ -3,19 +3,9 @@ import {
   initFramebufferObject, setUniforms
 } from "./gl-utils"
 import { createFilter, SUPPORTED_FILTERS } from './filter';
+import { loadImage, isImageLoaded } from 'web-util-kit';
 
-function loadImage(imgSrc: string) {
-  return new Promise<HTMLImageElement>((resolve, reject) => {
-    let img: HTMLImageElement = new Image()
-    img.onload = () => {
-      resolve(img)
-    }
-    img.onerror = () => {
-      reject(new Error('image load error'))
-    }
-    img.src = imgSrc
-  })
-}
+
 
 export interface FilterValues {
   [type: string]: number;
@@ -59,40 +49,28 @@ export default class GLImage {
     return blob;
   }
 
+  // from loaded image element
+  fromLoadedImage(img: HTMLIFrameElement) {
+    if (!(img instanceof HTMLImageElement)) {
+      throw new Error('img must be an image element!');
+    }
+    if (!isImageLoaded(img)) {
+      throw new Error('img must be loaded already!');
+    }
+    this.clear();
+    this.initImage(img);
+    this.draw();
+    return this;
+  }
+
   async loadImageSrc(src: string) {
     const img: HTMLImageElement = await loadImage(src);
     this.clear();
-    this.width = this.canvas.width = img.width;
-    this.height = this.canvas.height = img.height;
-    const glOptions = {
-      alpha: true,
-      premultipliedAlpha: false,
-      depth: false,
-      stencil: false,
-      antialias: false,
-      preserveDrawingBuffer: true
-    };
-    try {
-      this.gl = (
-        this.canvas.getContext('webgl', glOptions) ||
-        this.canvas.getContext('experimental-webgl', glOptions)
-      ) as WebGLRenderingContext;
-    } catch (e) {
-        throw new Error('This browser does not support WebGL');
-    }
-    
-    this.gl.clearColor(0, 0, 0, 0);
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-    this.texture = initTexture(this.gl, img) as WebGLTexture;
-    this.vertexBuffer = initVertex(this.gl);
-    this.filters.forEach((item: any) => {
-      initShaders(this.gl as WebGLRenderingContext, item);
-      initFilter(this.gl as WebGLRenderingContext, item.program);
-    });
+    this.initImage(img);   
     this.draw();
-
     return this;
   }
+
 
   applyFilter(type: string, value: number) {
     this.updateFilterUniformValue(type, value);
@@ -178,6 +156,37 @@ export default class GLImage {
       this.vertexBuffer = null;
       this.gl = null;
     }
+  }
+
+
+  private initImage(img: HTMLImageElement) {
+    this.width = this.canvas.width = img.width;
+    this.height = this.canvas.height = img.height;
+    const glOptions = {
+      alpha: true,
+      premultipliedAlpha: false,
+      depth: false,
+      stencil: false,
+      antialias: false,
+      preserveDrawingBuffer: true
+    };
+    try {
+      this.gl = (
+        this.canvas.getContext('webgl', glOptions) ||
+        this.canvas.getContext('experimental-webgl', glOptions)
+      ) as WebGLRenderingContext;
+    } catch (e) {
+      throw new Error('This browser does not support WebGL');
+    }
+
+    this.gl.clearColor(0, 0, 0, 0);
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    this.texture = initTexture(this.gl, img) as WebGLTexture;
+    this.vertexBuffer = initVertex(this.gl);
+    this.filters.forEach((item: any) => {
+      initShaders(this.gl as WebGLRenderingContext, item);
+      initFilter(this.gl as WebGLRenderingContext, item.program);
+    });
   }
 
   private updateFilterUniformValue(type: string, value: number) {
