@@ -142,6 +142,7 @@ void main() {
  * @param amount   0 to 1 (0 for no effect, 1 for maximum noise)
  */
 export const GLSL_FS_noise = `
+precision highp float;
 uniform sampler2D texture;
 uniform float noise_amount;
 varying vec2 texCoord;
