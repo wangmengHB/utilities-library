@@ -212,6 +212,7 @@ export default class GLImage {
     this.filters.push(createFilter('sepia'));
     this.filters.push(createFilter('vibrance'));
     this.filters.push(createFilter('vignette'));
+    this.filters.push(createFilter('noise'));
   }
 
   private drawScene(program: WebGLProgram, index: number) {

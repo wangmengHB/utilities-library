@@ -6,6 +6,7 @@ import {
   GLSL_FS_sepia,
   GLSL_FS_vibrance,
   GLSL_FS_vignette,
+  GLSL_FS_noise,
 } from './glsl/adjust';
 
 export interface UNIFORMS {
@@ -83,6 +84,16 @@ export const SUPPORTED_FILTERS: any = Object.freeze({
       'vignette_size': {
         value: 0,
         range: [0, 1]
+      },
+    },
+  },
+  'noise': {
+    vshader: defaultVertexSource,
+    fshader: GLSL_FS_noise,
+    uniforms: {
+      'noise_amount': {
+        value: 0,
+        range: [0, 1],
       },
     },
   },

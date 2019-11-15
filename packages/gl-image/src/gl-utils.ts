@@ -84,8 +84,7 @@ function loadShader(gl: WebGLRenderingContext, type: number, source: string) {
   // 创建着色器对象
   let shader = gl.createShader(type);
   if (shader == null) {
-      console.log('无法创建着色器');
-      return null;
+    throw new Error('faided to create webgl shader!');
   }
   // 设置着色器源代码
   gl.shaderSource(shader, source);
