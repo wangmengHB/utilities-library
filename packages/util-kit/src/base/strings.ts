@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CharCode } from '../keybinding/charCode';
-import { Constants } from './uint';
+import { Constants } from './numbers';
 
 export function isFalsyOrWhitespace(str: string | undefined): boolean {
 	if (!str || typeof str !== 'string') {

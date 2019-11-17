@@ -9,9 +9,7 @@ export {
   EventMultiplexer, EventBufferer, IWaitUntil
 } from './base/event';
 
-export { 
-  IDisposable, Disposable, toDisposable, 
-} from './base/lifecycle';
+export * from './base/lifecycle';
 
 export { URI } from './base/uri';
 
@@ -39,6 +37,9 @@ import * as dates from './base/date';
 import * as asyncs from './base/async';
 import * as decorators from './base/decorators';
 import * as numbers from './base/numbers';
+import * as filters from './base/filters';
+
+export * from './interface';
 
 
 export {
@@ -50,6 +51,7 @@ export {
   objects,
   asyncs,
   decorators,
+  filters
 
 };
 

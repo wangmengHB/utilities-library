@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { once } from './functional';
+import { IDisposable, IReference } from '../interface';
 
 /**
  * Enables logging of potentially leaked disposables.
@@ -44,9 +45,7 @@ function trackDisposable<T extends IDisposable>(x: T): T {
 	return x;
 }
 
-export interface IDisposable {
-	dispose(): void;
-}
+
 
 export function isDisposable<E extends object>(thing: E): thing is E & IDisposable {
 	return typeof (<IDisposable><any>thing).dispose === 'function'
@@ -243,9 +242,7 @@ export class UnownedDisposable<T extends IDisposable> extends Disposable {
 	}
 }
 
-export interface IReference<T> extends IDisposable {
-	readonly object: T;
-}
+
 
 export abstract class ReferenceCollection<T> {
 

@@ -3,7 +3,20 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import * as assert from 'assert';
-import { IFilter, or, matchesPrefix, matchesStrictPrefix, matchesCamelCase, matchesSubString, matchesContiguousSubString, matchesWords, fuzzyScore, IMatch, fuzzyScoreGraceful, fuzzyScoreGracefulAggressive, FuzzyScorer, createMatches } from '../lib/base/filters';
+import { 
+  filters, IFilter, FuzzyScorer,IMatch,  
+} from '../../src';
+
+
+const { 
+  or, matchesPrefix, 
+  matchesStrictPrefix, matchesCamelCase, 
+  matchesSubString, matchesContiguousSubString, 
+  matchesWords, fuzzyScore, 
+  fuzzyScoreGraceful, 
+  fuzzyScoreGracefulAggressive, 
+  createMatches 
+} = filters;
 
 function filterOk(filter: IFilter, word: string, wordToMatchAgainst: string, highlights?: { start: number; end: number; }[]) {
 	let r = filter(word, wordToMatchAgainst);

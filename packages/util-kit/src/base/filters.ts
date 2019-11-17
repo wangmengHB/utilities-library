@@ -3,19 +3,14 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CharCode } from 'vs/base/common/charCode';
-import { LRUCache } from 'vs/base/common/map';
-import * as strings from 'vs/base/common/strings';
+import { CharCode } from '../keybinding/charCode';
+import { LRUCache } from './map';
+import * as strings from './strings';
+import { IFilter, IMatch } from '../interface';
 
-export interface IFilter {
-	// Returns null if word doesn't match.
-	(word: string, wordToMatchAgainst: string): IMatch[] | null;
-}
-
-export interface IMatch {
-	start: number;
-	end: number;
-}
+// because FuzzyScore is used as namespace below,
+// so we has to define type FuzzyScore instead of import
+type FuzzyScore = [number, number, number];
 
 // Combined filters
 
@@ -515,13 +510,7 @@ export function isPatternInWord(patternLow: string, patternPos: number, patternL
 
 const enum Arrow { Top = 0b1, Diag = 0b10, Left = 0b100 }
 
-/**
- * A tuple of three values.
- * 0. the score
- * 1. the matches encoded as bitmask (2^53)
- * 2. the offset at which matching started
- */
-export type FuzzyScore = [number, number, number];
+
 
 export namespace FuzzyScore {
 	/**
@@ -534,9 +523,7 @@ export namespace FuzzyScore {
 	}
 }
 
-export interface FuzzyScorer {
-	(pattern: string, lowPattern: string, patternPos: number, word: string, lowWord: string, wordPos: number, firstMatchCanBeWeak: boolean): FuzzyScore | undefined;
-}
+
 
 export function fuzzyScore(pattern: string, patternLow: string, patternStart: number, word: string, wordLow: string, wordStart: number, firstMatchCanBeWeak: boolean): FuzzyScore | undefined {
 
