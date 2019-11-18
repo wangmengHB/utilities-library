@@ -5,8 +5,9 @@
 
 import { onUnexpectedError } from '../debug/errors';
 import { once as onceFn } from './functional';
-import { Disposable, IDisposable, toDisposable, combinedDisposable, DisposableStore } from './lifecycle';
+import { Disposable, toDisposable, combinedDisposable, DisposableStore } from './lifecycle';
 import { LinkedList } from './linkedList';
+import { IDisposable } from '../interface';
 
 /**
  * To an event a function with one or zero parameters

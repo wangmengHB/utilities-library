@@ -8,7 +8,7 @@ import {
   EventMultiplexer, AsyncEmitter, IWaitUntil, 
   PauseableEmitter 
 } from 'src/index';
-import { IDisposable, DisposableStore } from 'src/base/lifecycle';
+import { IDisposable, DisposableStore } from 'src/index';
 import * as Errors from 'src/debug/errors';
 import { timeout } from 'src/base/async';
 

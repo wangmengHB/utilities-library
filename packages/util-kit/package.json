@@ -1,6 +1,6 @@
 {
   "name": "util-kit",
-  "version": "0.0.0-rc.8",
+  "version": "0.0.0-rc.9",
   "description": "this is an util library full of collection from other awesome open source project.",
   "main": "lib/index.js",
   "module": "lib/index.js",

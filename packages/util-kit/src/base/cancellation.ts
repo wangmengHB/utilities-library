@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { Emitter, Event } from './event';
-import { IDisposable } from './lifecycle';
+import { IDisposable } from '../interface';
 
 export interface CancellationToken {
 	readonly isCancellationRequested: boolean;

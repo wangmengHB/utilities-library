@@ -1,6 +1,8 @@
+export * from './interface';
 
 export * from './base/functional';
 
+export * from './base/lifecycle';
 
 export { LinkedList } from './base/linkedList';
 
@@ -8,8 +10,6 @@ export {
   Event, Emitter, PauseableEmitter, AsyncEmitter, 
   EventMultiplexer, EventBufferer, IWaitUntil
 } from './base/event';
-
-export * from './base/lifecycle';
 
 export { URI } from './base/uri';
 
@@ -29,7 +29,7 @@ export { RGBA, HSLA, HSVA, Color} from './color/color';
 import * as platform from './platform';
 import { OperatingSystem } from './platform/platform';
 
-
+import * as types from './base/types';
 import * as strings from './base/strings';
 import * as arrays from './base/arrays';
 import * as objects from './base/objects';
@@ -39,11 +39,12 @@ import * as decorators from './base/decorators';
 import * as numbers from './base/numbers';
 import * as filters from './base/filters';
 
-export * from './interface';
+
 
 
 export {
   platform, OperatingSystem,
+  types,
   strings,
   arrays,
   dates,

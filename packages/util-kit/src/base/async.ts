@@ -6,8 +6,10 @@
 import { CancellationToken, CancellationTokenSource } from './cancellation';
 import * as errors from '../debug/errors';
 import { Emitter, Event } from './event';
-import { IDisposable, toDisposable } from './lifecycle';
+import { toDisposable } from './lifecycle';
 import { URI } from './uri';
+import { IDisposable } from '../interface';
+
 
 interface Thenable<T> extends PromiseLike<T> {
 }
