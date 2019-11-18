@@ -1,7 +1,10 @@
+
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
+export namespace numbers {
+
 
 export function clamp(value: number, min: number, max: number): number {
 	return Math.min(Math.max(value, min), max);
@@ -87,4 +90,7 @@ export function toUint32Array(arr: number[]): Uint32Array {
 		r[i] = toUint32(arr[i]);
 	}
 	return r;
+}
+
+
 }

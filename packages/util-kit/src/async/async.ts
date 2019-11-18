@@ -3,16 +3,19 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CancellationToken, CancellationTokenSource } from './cancellation';
+import { CancellationToken, CancellationTokenSource } from '../event/cancellation';
 import * as errors from '../debug/errors';
-import { Emitter, Event } from './event';
-import { toDisposable } from './lifecycle';
-import { URI } from './uri';
+import { Emitter, Event } from '../event/event';
+import { toDisposable } from '../lifecycle/lifecycle';
+import { URI } from '../base/uri';
 import { IDisposable } from '../interface';
 
 
 interface Thenable<T> extends PromiseLike<T> {
 }
+
+
+export namespace asyncs {
 
 export function isThenable<T>(obj: any): obj is Promise<T> {
 	return obj && typeof (<Promise<any>>obj).then === 'function';
@@ -774,4 +777,6 @@ export async function retry<T>(task: ITask<Promise<T>>, delay: number, retries: 
 	}
 
 	throw lastError;
+}
+
 }

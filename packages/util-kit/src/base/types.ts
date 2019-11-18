@@ -11,6 +11,8 @@ const _typeof = {
 	function: 'function'
 };
 
+export namespace types {
+
 /**
  * @returns whether the provided parameter is a JavaScript Array or not.
  */
@@ -255,3 +257,6 @@ export type AddFirstParameterToFunctions<Target, TargetFunctionsReturnType, Firs
 	// Else: just leave as is
 	Target[K]
 };
+
+
+}

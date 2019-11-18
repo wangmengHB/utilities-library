@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import * as assert from 'assert';
-import * as objects from 'src/base/objects';
+import { objects } from 'src/index';
 
 let check = (one: any, other: any, msg: string) => {
 	assert(objects.equals(one, other), msg);

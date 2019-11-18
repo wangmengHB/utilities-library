@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { once } from './functional';
+import { once } from '../base/functional';
 import { IDisposable, IReference } from '../interface';
 
 /**

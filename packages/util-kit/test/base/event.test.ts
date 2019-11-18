@@ -6,11 +6,12 @@ import * as assert from 'assert';
 import { 
   Event, Emitter, EventBufferer, 
   EventMultiplexer, AsyncEmitter, IWaitUntil, 
-  PauseableEmitter 
+  PauseableEmitter , IDisposable, DisposableStore, asyncs, 
 } from 'src/index';
-import { IDisposable, DisposableStore } from 'src/index';
 import * as Errors from 'src/debug/errors';
-import { timeout } from 'src/base/async';
+
+const { timeout } = asyncs;
+
 
 namespace Samples {
 

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as assert from 'assert';
-import { LinkedList } from 'src/base/linkedList';
+import { LinkedList } from 'src/index';
 
 suite('LinkedList', function () {
 

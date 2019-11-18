@@ -4,7 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CharCode } from '../keybinding/charCode';
-import { Constants } from './numbers';
+import { numbers } from './numbers';
+const { Constants } = numbers;
+
+export namespace strings {
 
 export function isFalsyOrWhitespace(str: string | undefined): boolean {
 	if (!str || typeof str !== 'string') {
@@ -1037,4 +1040,7 @@ export function singleLetterHash(n: number): string {
 	}
 
 	return String.fromCharCode(CharCode.A + n - LETTERS_CNT);
+}
+
+
 }

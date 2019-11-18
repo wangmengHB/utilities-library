@@ -3,6 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+
+export namespace decorators {
+
 export function createDecorator(mapFn: (fn: Function, key: string) => Function): Function {
 	return (target: any, key: string, descriptor: any) => {
 		let fnKey: string | null = null;
@@ -111,4 +114,7 @@ export function debounce<T>(delay: number, reducer?: IDebouceReducer<T>, initial
 			}, delay);
 		};
 	});
+}
+
+
 }

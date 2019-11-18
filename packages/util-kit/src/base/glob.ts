@@ -3,13 +3,16 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as arrays from './arrays';
-import * as strings from './strings';
+import { arrays } from './arrays';
+import { strings } from './strings';
 import * as extpath from './extpath';
 import * as paths from './path';
 import { LRUCache } from './map';
 import { CharCode } from '../keybinding/charCode';
-import { isThenable } from './async';
+import { asyncs } from '../async/async';
+
+const { isThenable } = asyncs;
+
 
 export interface IExpression {
 	[pattern: string]: boolean | SiblingClause;

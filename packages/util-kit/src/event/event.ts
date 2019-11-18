@@ -4,9 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { onUnexpectedError } from '../debug/errors';
-import { once as onceFn } from './functional';
-import { Disposable, toDisposable, combinedDisposable, DisposableStore } from './lifecycle';
-import { LinkedList } from './linkedList';
+import { once as onceFn } from '../base/functional';
+import { 
+  Disposable, toDisposable, combinedDisposable, DisposableStore 
+} from '../lifecycle/lifecycle';
+import { LinkedList } from '../data-structure/linkedList';
 import { IDisposable } from '../interface';
 
 /**

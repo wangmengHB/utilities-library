@@ -3,7 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { isObject, isUndefinedOrNull, isArray } from './types';
+import { types } from './types';
+
+const { isObject, isUndefinedOrNull, isArray } = types;
+
+
+export namespace objects {
 
 export function deepClone<T>(obj: T): T {
 	if (!obj || typeof obj !== 'object') {
@@ -228,4 +233,6 @@ export function distinct(base: obj, target: obj): obj {
 	});
 
 	return result;
+}
+
 }

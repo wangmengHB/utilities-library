@@ -1,15 +1,17 @@
 export * from './interface';
 
+// basic data - structure
 export * from './base/functional';
+export { LinkedList } from './data-structure/linkedList';
 
-export * from './base/lifecycle';
 
-export { LinkedList } from './base/linkedList';
+export * from './lifecycle/lifecycle';
 
-export { 
-  Event, Emitter, PauseableEmitter, AsyncEmitter, 
-  EventMultiplexer, EventBufferer, IWaitUntil
-} from './base/event';
+// event and async
+export * from './event/event';
+export * from './event/cancellation';
+export * from './event/sequence';     // ? temperary useless
+
 
 export { URI } from './base/uri';
 
@@ -29,14 +31,24 @@ export { RGBA, HSLA, HSVA, Color} from './color/color';
 import * as platform from './platform';
 import { OperatingSystem } from './platform/platform';
 
-import * as types from './base/types';
-import * as strings from './base/strings';
-import * as arrays from './base/arrays';
-import * as objects from './base/objects';
-import * as dates from './base/date';
-import * as asyncs from './base/async';
-import * as decorators from './base/decorators';
-import * as numbers from './base/numbers';
+
+
+// basic utils
+export { types } from './base/types';
+export { strings } from './base/strings';
+export { dates } from './base/date';
+export { numbers } from './base/numbers';
+export { arrays } from './base/arrays';
+export { objects } from './base/objects';
+export { decorators } from './base/decorators';
+
+
+
+// async utils 
+export { asyncs } from './async/async';
+
+
+
 import * as filters from './base/filters';
 
 
@@ -44,14 +56,7 @@ import * as filters from './base/filters';
 
 export {
   platform, OperatingSystem,
-  types,
-  strings,
-  arrays,
-  dates,
-  numbers,
-  objects,
-  asyncs,
-  decorators,
+  
   filters
 
 };

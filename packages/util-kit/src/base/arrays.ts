@@ -4,8 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { canceled } from '../debug/errors';
-import { CancellationToken } from './cancellation';
-import { ISplice } from './sequence';
+import { CancellationToken } from '../event/cancellation';
+import { ISplice } from '../event/sequence';
+
+
+export namespace arrays {
 
 /**
  * Returns the last element of an array.
@@ -684,4 +687,5 @@ export function uniqueArray(arr: Array<any>) : Array<any> {
 }
 
 
+}
 

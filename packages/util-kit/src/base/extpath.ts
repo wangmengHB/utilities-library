@@ -4,9 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { isWindows } from '../platform/platform';
-import { startsWithIgnoreCase, equalsIgnoreCase, endsWith, rtrim } from './strings';
+import { strings } from './strings';
 import { CharCode } from '../keybinding/charCode';
 import { sep, posix, isAbsolute, join, normalize } from './path';
+
+const { startsWithIgnoreCase, equalsIgnoreCase, endsWith, rtrim } = strings;
 
 export function isPathSeparator(code: number) {
 	return code === CharCode.Slash || code === CharCode.Backslash;

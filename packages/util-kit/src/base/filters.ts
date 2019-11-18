@@ -5,7 +5,7 @@
 
 import { CharCode } from '../keybinding/charCode';
 import { LRUCache } from './map';
-import * as strings from './strings';
+import { strings } from './strings';
 import { IFilter, IMatch } from '../interface';
 
 // because FuzzyScore is used as namespace below,
