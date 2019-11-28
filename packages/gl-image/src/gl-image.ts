@@ -122,6 +122,12 @@ export default class GLImage {
     this.gl.viewport(0, 0, this.width, this.height);
     this.filters.forEach((item: any, index: number) => {
       (this.gl as WebGLRenderingContext).useProgram(item.program);
+
+      if (item.uniforms.pixelate_step_w && item.uniforms.pixelate_step_h) {
+        item.uniforms.pixelate_step_w.value = 1 / this.width;
+        item.uniforms.pixelate_step_h.value = 1 / this.height;
+      }
+
       setUniforms(this.gl as WebGLRenderingContext, item.program, item.uniforms);
       this.drawScene(item.program as WebGLProgram, index);
     });
@@ -213,6 +219,7 @@ export default class GLImage {
     this.filters.push(createFilter('vibrance'));
     this.filters.push(createFilter('vignette'));
     this.filters.push(createFilter('noise'));
+    this.filters.push(createFilter('pixelate'));
   }
 
   private drawScene(program: WebGLProgram, index: number) {
