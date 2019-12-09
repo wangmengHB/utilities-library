@@ -51,6 +51,8 @@ export { asyncs } from './async/async';
 
 import * as filters from './base/filters';
 
+export { generateUuid } from './utils/uuid';
+
 
 
 
