@@ -18,20 +18,20 @@ import { getScrollLeftTop, getElementOffset } from './dom';
  * @param {Boolean} ignoreZoom
  * @return {Object} object with "x" and "y" number values
  */
-export function getCoordinates(e: MouseEvent ) {  
-  let canvasElement = e.target as HTMLCanvasElement;
-  if (!canvasElement || !(canvasElement instanceof HTMLCanvasElement)) {
+export function getCoordinates(e: MouseEvent, targetCanvas: HTMLCanvasElement ) {  
+  
+  if (!targetCanvas || !(targetCanvas instanceof HTMLCanvasElement)) {
     throw new Error('the event must be targeted on the canvas element.')
   }
     
-  let scroll = getScrollLeftTop(canvasElement);
-  let offset = getElementOffset(canvasElement);
+  let scroll = getScrollLeftTop(targetCanvas);
+  let offset = getElementOffset(targetCanvas);
   let pointer = {
     x: e.clientX - offset.left + scroll.left,
     y: e.clientY - offset.top + scroll.top ,
   };
 
-  let bounds = canvasElement.getBoundingClientRect();
+  let bounds = targetCanvas.getBoundingClientRect();
   let boundsWidth = bounds.width || 0;
   let boundsHeight = bounds.height || 0;
   let cssScale;
@@ -50,8 +50,8 @@ export function getCoordinates(e: MouseEvent ) {
     cssScale = { width: 1, height: 1 };
   } else {
     cssScale = {
-      width: canvasElement.width / boundsWidth,
-      height: canvasElement.height / boundsHeight
+      width: targetCanvas.width / boundsWidth,
+      height: targetCanvas.height / boundsHeight
     };
   }
 
