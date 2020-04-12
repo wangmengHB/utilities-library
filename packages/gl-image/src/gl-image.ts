@@ -48,12 +48,18 @@ export default class GLImage {
     if (this.base64) {
       return this.base64;
     }
-    console.log('for performance consideration, we use preserveDrawingBuffer: false, so use canvas.toDataURL will get a blank image.');
+    console.warn(
+      'No drawing action detected,  It may return a blank image.' +
+      'please call this after image is drawed.'
+    );
     return this.canvas.toDataURL(this.dataURLFormat, this.dataURLQuality);
   }
 
   getCanvas() {
-    console.log('retired. please use getDataURL to get the output image.')
+    console.log(
+      'for performance consideration, we use preserveDrawingBuffer false mode. ' +
+      'So canvas.toDataURL may return a blank image, please use getDataURL to get base64.'
+    );
     return this.canvas;
   }
 
@@ -244,7 +250,7 @@ export default class GLImage {
     this.filters.push(createFilter('vibrance'));
     this.filters.push(createFilter('vignette'));
     this.filters.push(createFilter('noise'));
-    this.filters.push(createFilter('pixelate'));
+    // this.filters.push(createFilter('pixelate'));
   }
 
   private drawScene(program: WebGLProgram, index: number) {
