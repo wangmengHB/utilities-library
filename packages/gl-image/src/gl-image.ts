@@ -25,17 +25,41 @@ export default class GLImage {
   private tempFramebuffers: any[] = [];
   private currentFramebufferIndex = 0;
 
+  // for output result.
+  private base64: string;
+  private dataURLFormat: 'image/jpeg' | 'image/png' = 'image/png';
+  private dataURLQuality: number = 0.92;
 
   constructor() {
     this.canvas = document.createElement('canvas');
     this.setupFilters();  
   }
 
+  setDataURLOptions(dataURLFormat?: string, dataURLQuality?: number) {
+    if (dataURLFormat === 'image/jpeg' || dataURLFormat === 'image/png') {
+      this.dataURLFormat = dataURLFormat;
+      if (typeof dataURLQuality === 'number' && dataURLQuality <= 1) {
+        this.dataURLQuality = dataURLQuality;
+      }
+    }
+  }
+
+  getDataURL() {
+    if (this.base64) {
+      return this.base64;
+    }
+    console.log('for performance consideration, we use preserveDrawingBuffer: false, so use canvas.toDataURL will get a blank image.');
+    return this.canvas.toDataURL(this.dataURLFormat, this.dataURLQuality);
+  }
+
   getCanvas() {
+    console.log('retired. please use getDataURL to get the output image.')
     return this.canvas;
   }
 
   toDataUrl() {
+    console.log('retired. please use getDataURL to get the output image.');
+    console.log('for performance consideration, we use preserveDrawingBuffer: false, so use canvas.toDataURL will get a blank image.')
     return this.canvas.toDataURL('image/png');
   }
 
@@ -131,6 +155,7 @@ export default class GLImage {
       setUniforms(this.gl as WebGLRenderingContext, item.program, item.uniforms);
       this.drawScene(item.program as WebGLProgram, index);
     });
+    this.base64 = this.canvas.toDataURL(this.dataURLFormat, this.dataURLQuality);
   }
 
   private clear() {
@@ -174,7 +199,7 @@ export default class GLImage {
       depth: false,
       stencil: false,
       antialias: false,
-      preserveDrawingBuffer: true
+      preserveDrawingBuffer: false
     };
     try {
       this.gl = (

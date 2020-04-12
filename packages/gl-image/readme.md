@@ -62,12 +62,8 @@ glImage.loadImageSrc(src).then(() => {
     'saturation': -0.7
   });
 
-  // get the canvas element from glImage instance;
-  // you can put it in the DOM for show
-  const canvas = glImage.getCanvas();
-
-  // or you can the base64 output data.
-  const base64 = glImage.toDataUrl();
+  // you can the base64 output data.
+  const base64 = glImage.getDataURL();
 
 });
 ```
@@ -85,7 +81,7 @@ async function processSingle(imageSrc) {
     'brightness': 0.3,
     'saturation': -0.7
   });
-  return glImage.toDataUrl();
+  return glImage.getDataURL();
 }
 
 async function batchProcess(imageSrcList) {
@@ -102,4 +98,11 @@ batchProcess(imageSrcList).then((result) => {
 })
 
 ```
+
+# Notice  
+1. for performance consideration, use preserveDrawingBuffer: false mode.
+2. please use getDataURL api to get the output dataURL.
+3. you can use setDataURLOptions(format, quality) to change the image type for output.
+format: 'image/jpeg' | 'image/png'
+quality: number, equal or less than 1, greater than 0. 
 
