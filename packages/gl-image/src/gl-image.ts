@@ -56,15 +56,11 @@ export default class GLImage {
   }
 
   getCanvas() {
-    console.log(
-      'for performance consideration, we use preserveDrawingBuffer false mode. ' +
-      'So canvas.toDataURL may return a blank image, please use getDataURL to get base64.'
-    );
     return this.canvas;
   }
 
   toDataUrl() {
-    console.log('retired. please use getDataURL to get the output image.');
+    console.log('retired. it will be removed later. please use getDataURL to get the output image.');
     console.log('for performance consideration, we use preserveDrawingBuffer: false, so use canvas.toDataURL will get a blank image.')
     return this.canvas.toDataURL('image/png');
   }

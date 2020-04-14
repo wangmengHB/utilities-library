@@ -103,6 +103,6 @@ batchProcess(imageSrcList).then((result) => {
 1. for performance consideration, use preserveDrawingBuffer: false mode.
 2. please use getDataURL api to get the output dataURL.
 3. you can use setDataURLOptions(format, quality) to change the image type for output.
-format: 'image/jpeg' | 'image/png'
-quality: number, equal or less than 1, greater than 0. 
+* format: 'image/jpeg' | 'image/png'    
+* quality: number, equal or less than 1, greater than 0.    
 
