@@ -198,7 +198,7 @@ function bmvbhash(data: ImageData, bits: number) {
     return bits_to_hexhash(result);
 };
 
-export function blockhashData(imgData: ImageData, bits: number = 16, method: number = 1) {
+export function blockhashData(imgData: ImageData, bits: number = 8, method: number = 1) {
     let hash;
 
     if (method === 1) {
