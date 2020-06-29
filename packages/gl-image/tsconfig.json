@@ -7,6 +7,8 @@
 		"noUnusedLocals": true,
 		"noImplicitThis": true,
 		"alwaysStrict": true,
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,	
 		"strictBindCallApply": true,
 		"strictNullChecks": true,
 		"forceConsistentCasingInFileNames": true,
@@ -20,9 +22,9 @@
       "dom",
       "es2020"
     ],
-    "module": "commonjs",
     "declaration": true,
-    "target": "es5",
+		"target": "es5",
+		"module": "esnext",
     "removeComments": false,
 		"sourceMap": false, 
     "outDir": "./dist"

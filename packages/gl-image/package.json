@@ -1,6 +1,6 @@
 {
   "name": "gl-image",
-  "version": "0.0.3-rc.1",
+  "version": "0.0.3-rc.2",
   "description": "image filter utils based on webgl",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -10,7 +10,10 @@
     "lib"
   ],
   "scripts": {
-    "build": "rm -rf dist && rm -rf lib && tsc --outDir './lib'",
+    "dev": "webpack-dev-server --https --inline --progress --config ./webpack.demo.conf.js",
+    "build:commonjs": "rm -rf lib && tsc --module 'CommonJS' --outDir './lib'",
+    "build:esm": "rm -rf esm && tsc --target 'ESNext' --module 'ESNext' --outDir './esm'",
+    "build": "npm run build:commonjs",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -29,13 +32,34 @@
   },
   "homepage": "https://github.com/wangmengHB/gl-image#readme",
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-typescript": "^7.1.0",
+    "@babel/register": "^7.0.0",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.3",
+    "babel-loader": "^8.1.0",
+    "core-js": "^2.6.11",
+    "css-loader": "^2.1.0",
+    "dat.gui": "^0.7.7",
+    "file-loader": "^4.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "json-loader": "^0.5.7",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
     "mocha": "^6.2.2",
     "mocha-junit-reporter": "^1.23.1",
+    "rimraf": "^2.2.8",
+    "style-loader": "^0.23.1",
+    "ts-loader": "^6.0.4",
     "ts-node": "^8.4.1",
-    "typescript": "^3.6.4",
-    "rimraf": "^2.2.8"
+    "typescript": "^3.9.2",
+    "url-loader": "^2.2.0",
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
   },
   "dependencies": {
     "util-kit": "^0.0.0-rc.6",

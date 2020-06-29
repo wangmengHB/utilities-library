@@ -27,8 +27,8 @@ export function setUniforms(gl: WebGLRenderingContext, program: WebGLProgram, un
     if (location === null) {
       continue;
     }
-    let value = (uniforms[name] as UNIFORMITEM).value;
-    let range =  (uniforms[name] as UNIFORMITEM).range;
+    let value: any = (uniforms[name] as UNIFORMITEM).value;
+    let range: any =  (uniforms[name] as UNIFORMITEM).range;
     
     if (Array.isArray(value)) {
       let next = value.slice();
@@ -50,7 +50,7 @@ export function setUniforms(gl: WebGLRenderingContext, program: WebGLProgram, un
       }
       gl.uniform1f(location, value);
     } else {
-        throw 'attempted to set uniform "' + name + '" to invalid value ' + (value || 'undefined').toString();
+        throw new Error('attempted to set uniform "' + name + '" to invalid value ' + (value || 'undefined').toString());
     }
   }
 
