@@ -135,8 +135,8 @@ batchProcess(imageSrcList).then((result) => {
 ```
 
 # Notice  
-1. For performance consideration, it is using `preserveDrawingBuffer: false` mode inside.
-So if you cannot get image data ( or data url) from canvas node.
+1. For performance consideration, it is using `preserveDrawingBuffer: false` mode inside.       
+So if you cannot get image data ( or data url) from canvas node.          
 Please use `getImageData()` or `getDataURL()` api to get the output image data or data url.  
 
 2. you can use `setDataURLOptions(format, quality)` before `applyFilter(s)` to specify the data url.
