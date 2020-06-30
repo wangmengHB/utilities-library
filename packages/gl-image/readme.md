@@ -9,6 +9,8 @@ So gl-image do something more to support multiple filters (multiple shader progr
 
 And it is really simple for use.
 
+![demo1](https://raw.githubusercontent.com/wangmengHB/gl-image/master/demo/demo.jpg)
+
 # install
 ```bash
 npm install --S gl-image
