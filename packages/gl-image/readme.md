@@ -2,10 +2,10 @@
 gl-image is a util library based on webgl for image filter functions.   
 This project is inspired by [@evanw](https://github.com/evanw/glfx.js).
 
-Here is the main difference between glfx.js and gl-image.js:    
+Here is the main difference between glfx.js and gl-image:    
 glfx.js just support one shader program at one time.    
 But in many use case, we need to do multiple filters to one image, and every operation can be redoable.
-So gl-image do something more to support multiple filters (multiple shader program).
+So gl-image do something more to support multiple filters (multiple shader programs inside at once).
 
 And it is really simple for use.
 
@@ -54,26 +54,26 @@ const glImage = new GLImage();
 ```
 In most cases, one GLImage instance is enough for usage, you don't need create a new to handle another image.   
 ## 1. load image from url
-*  async loadImageSrc(url);   
-*  setDataURLOptions(dataURLFormat?: 'image/jpeg' | 'image/png', dataURLQuality?: number);
-Not required actually.     
-If you need specify the dataUrl param, please set it before drawing action.   
+*  `async loadImageSrc(url)`  
 
 ## 2. do filter action
-* applyFilter(filterName, filterValue)
-* applyFilters({name1: value1, ...})
+* `applyFilter(filterName, filterValue)`
+* `applyFilters({name1: value1, ...})`
 Please refer to the above table to find the available filter name and valid value range.  
 
 
 ## 3. get the output
-* getDataURL();
-* getImageData();
+* `getDataURL()`: DataURL; 
+* `getImageData()`: ImageData;
 
-* getCanvas(): 
-You can only append `getCanvas()` in DOM for showing.
+*  `setDataURLOptions(dataURLFormat?: 'image/jpeg' | 'image/png', dataURLQuality?: number)`;    
+Not required actually. If you need specify the dataUrl param, please set it before filter action.  
+
+* `getCanvas()`: 
+It return the canvas node inside glImage.
+You can append it (`getCanvas()`) in DOM for showing.
 But you can not draw `getCanvas()` in another canvas, 
 because it is `preserveDrawingBuffer: false` inside.  Please use the above 2 methods instead. 
-
 
 
 # usage
@@ -134,9 +134,12 @@ batchProcess(imageSrcList).then((result) => {
 ```
 
 # Notice  
-1. for performance consideration, use preserveDrawingBuffer: false mode.
-2. please use getDataURL api to get the output dataURL.
-3. you can use setDataURLOptions(format, quality) to change the image type for output.
+1. For performance consideration, it is using `preserveDrawingBuffer: false` mode inside.
+So if you cannot get image data ( or data url) from canvas node.
+Please use `getImageData()` or `getDataURL()` api to get the output image data or data url.  
+
+2. you can use `setDataURLOptions(format, quality)` before `applyFilter(s)` to specify the data url.
 * format: 'image/jpeg' | 'image/png'    
 * quality: number, equal or less than 1, greater than 0.    
+It is consistent with the canvas.toDataURL specification.  
 
