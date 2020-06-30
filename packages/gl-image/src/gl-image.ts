@@ -29,6 +29,7 @@ export default class GLImage {
   private base64: string;
   private dataURLFormat: 'image/jpeg' | 'image/png' = 'image/png';
   private dataURLQuality: number = 0.92;
+  private imageData?: ImageData;
 
   constructor() {
     this.canvas = document.createElement('canvas');
@@ -45,25 +46,52 @@ export default class GLImage {
   }
 
   getDataURL() {
-    if (this.base64) {
-      return this.base64;
-    }
-    console.warn(
-      'No drawing action detected,  It may return a blank image.' +
-      'please call this after image is drawed.'
-    );
-    return this.canvas.toDataURL(this.dataURLFormat, this.dataURLQuality);
+    return this.base64;
+  }
+
+  getImageData() {
+    return this.imageData;
   }
 
   getCanvas() {
     return this.canvas;
   }
 
-  toDataUrl() {
-    console.log('retired. it will be removed later. please use getDataURL to get the output image.');
-    console.log('for performance consideration, we use preserveDrawingBuffer: false, so use canvas.toDataURL will get a blank image.')
-    return this.canvas.toDataURL('image/png');
+  
+  /*
+   return an ImageData for other canvas2D drawing
+  */
+  private generateImageData(): ImageData | undefined {
+    if (!this.gl) {
+      return undefined;
+    }
+    const { width, height } = this;
+    const pixels = new Uint8Array( width * height * 4);
+    this.gl.readPixels(0, 0, width, height, this.gl.RGBA, this.gl.UNSIGNED_BYTE, pixels);
+
+    // FLIP Y Axis
+    const halfHeight = Math.floor(height / 2);  // the | 0 keeps the result an int
+    const bytesPerRow = width * 4;
+
+    // make a temp buffer to hold one row
+    const temp = new Uint8Array(width * 4);
+    for (let y = 0; y < halfHeight; ++y) {
+      let topOffset = y * bytesPerRow;
+      let bottomOffset = (height - y - 1) * bytesPerRow;
+
+      // make copy of a row on the top half
+      temp.set(pixels.subarray(topOffset, topOffset + bytesPerRow));
+
+      // copy a row from the bottom half to the top
+      pixels.copyWithin(topOffset, bottomOffset, bottomOffset + bytesPerRow);
+
+      // copy the copy of the top half row to the bottom half 
+      pixels.set(temp, bottomOffset);
+    }
+    return new ImageData(new Uint8ClampedArray(pixels), width, height);
   }
+
+
 
   async fetchBlob() {
     const p = new Promise((resolve) => {
@@ -157,6 +185,7 @@ export default class GLImage {
       setUniforms(this.gl as WebGLRenderingContext, item.program, item.uniforms);
       this.drawScene(item.program as WebGLProgram, index);
     });
+    this.imageData = this.generateImageData();
     this.base64 = this.canvas.toDataURL(this.dataURLFormat, this.dataURLQuality);
   }
 
@@ -201,7 +230,7 @@ export default class GLImage {
       depth: false,
       stencil: false,
       antialias: false,
-      preserveDrawingBuffer: false
+      preserveDrawingBuffer: false,
     };
     try {
       this.gl = (

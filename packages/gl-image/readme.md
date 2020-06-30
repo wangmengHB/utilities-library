@@ -34,12 +34,42 @@ glImage.loadImageSrc(src).then(() => {
 | vibrance_amount    | 0                 | [-1, 1]     | 
 | vignette_amount    | 0                 | [0, 1]      | 
 | vignette_size      | 0                 | [0, 1]      | 
+| noise_amount      | 0                 | [0, 1]      | 
+
 
 default value in the above table means no filter effect.
 
 ###### note: 
-1. please make sure the image source url is cross-origin, otherwise browser will block reading pixels from the image. gl-image will failed to do anything.
-2. please make sure your browser supports webgl.
+1. please make sure the image source url is cross-origin supported, otherwise browser will block reading pixels from the image. gl-image will failed to do anything.
+2. please make sure your browser supports webgl. 
+3. this npm package cannot run in nodejs environment.  
+
+
+# API
+```ts
+import GLImage from 'gl-image';
+const glImage = new GLImage();
+```
+In most cases, one GLImage instance is enough for usage, you don't need create a new to handle another image.   
+## 1. load image from url
+*  async loadImageSrc(url);   
+*  setDataURLOptions(dataURLFormat?: 'image/jpeg' | 'image/png', dataURLQuality?: number);
+Not required actually.     
+If you need specify the dataUrl param, please set it before drawing action.   
+
+## 2. do filter action
+* applyFilter(name, val)
+* applyFilters({key1: val1, ...})
+
+## 3. get the output
+* getDataURL();
+* getImageData();
+
+* getCanvas(): 
+you can only append `getCanvs()` in DOM. 
+But you can not draw `getCanvs()` in another canvas, 
+because it is `preserveDrawingBuffer: false` inside.  Please use the above 2 methods instead. 
+
 
 
 # usage

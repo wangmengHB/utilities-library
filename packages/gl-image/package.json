@@ -1,19 +1,19 @@
 {
   "name": "gl-image",
-  "version": "0.0.3-rc.2",
+  "version": "0.0.4",
   "description": "image filter utils based on webgl",
   "main": "lib/index.js",
-  "module": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "module": "esm/index.js",
+  "typings": "esm/index.d.ts",
   "files": [
-    "dist",
-    "lib"
+    "lib",
+    "esm"
   ],
   "scripts": {
     "dev": "webpack-dev-server --https --inline --progress --config ./webpack.demo.conf.js",
     "build:commonjs": "rm -rf lib && tsc --module 'CommonJS' --outDir './lib'",
     "build:esm": "rm -rf esm && tsc --target 'ESNext' --module 'ESNext' --outDir './esm'",
-    "build": "npm run build:commonjs",
+    "build": "npm run build:commonjs & npm run build:esm",
     "prepublish": "npm run build"
   },
   "repository": {
