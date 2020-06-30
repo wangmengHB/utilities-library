@@ -58,16 +58,18 @@ Not required actually.
 If you need specify the dataUrl param, please set it before drawing action.   
 
 ## 2. do filter action
-* applyFilter(name, val)
-* applyFilters({key1: val1, ...})
+* applyFilter(filterName, filterValue)
+* applyFilters({name1: value1, ...})
+Please refer to the above table to find the available filter name and valid value range.  
+
 
 ## 3. get the output
 * getDataURL();
 * getImageData();
 
 * getCanvas(): 
-you can only append `getCanvs()` in DOM. 
-But you can not draw `getCanvs()` in another canvas, 
+You can only append `getCanvas()` in DOM for showing.
+But you can not draw `getCanvas()` in another canvas, 
 because it is `preserveDrawingBuffer: false` inside.  Please use the above 2 methods instead. 
 
 
