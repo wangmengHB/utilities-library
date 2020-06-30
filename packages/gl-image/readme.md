@@ -57,8 +57,8 @@ In most cases, one GLImage instance is enough for usage, you don't need create a
 *  `async loadImageSrc(url)`  
 
 ## 2. do filter action
-* `applyFilter(filterName, filterValue)`
-* `applyFilters({name1: value1, ...})`
+* `applyFilter(filterName, filterValue)`    
+* `applyFilters({name1: value1, ...})`      
 Please refer to the above table to find the available filter name and valid value range.  
 
 
@@ -69,11 +69,12 @@ Please refer to the above table to find the available filter name and valid valu
 *  `setDataURLOptions(dataURLFormat?: 'image/jpeg' | 'image/png', dataURLQuality?: number)`;    
 Not required actually. If you need specify the dataUrl param, please set it before filter action.  
 
-* `getCanvas()`: 
-It return the canvas node inside glImage.
+* `getCanvas()`:        
+It return the canvas node inside glImage.     
 You can append it (`getCanvas()`) in DOM for showing.
-But you can not draw `getCanvas()` in another canvas, 
-because it is `preserveDrawingBuffer: false` inside.  Please use the above 2 methods instead. 
+But you can not draw `getCanvas()` in another canvas.   
+because it is `preserveDrawingBuffer: false` inside.      
+Please use the above 2 methods instead. 
 
 
 # usage
