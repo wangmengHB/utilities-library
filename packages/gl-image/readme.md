@@ -52,7 +52,7 @@ default value in the above table means no filter effect.
 import GLImage from 'gl-image';
 const glImage = new GLImage();
 ```
-In most cases, one GLImage instance is enough for usage, you don't need create a new to handle another image.   
+In most cases, one GLImage instance is enough for usage, you don't need create a new one to handle another image.   
 ## 1. load image from url
 *  `async loadImageSrc(url)`  
 
@@ -63,19 +63,15 @@ Please refer to the above table to find the available filter name and valid valu
 
 
 ## 3. get the output
-* `getDataURL()`: DataURL; 
-* `getImageData()`: ImageData;
 
-*  `setDataURLOptions(dataURLFormat?: 'image/jpeg' | 'image/png', dataURLQuality?: number)`;    
-Not required actually. If you need specify the dataUrl param, please set it before filter action.  
+For performance consideration, it is using `preserveDrawingBuffer: false` mode inside. So that you would lose drawing data immediately in another event loop. So it is necessary to have another 2D canvas inside to store the drawing result.  
+The output is stored in another 2D canvas for outside usage. 
 
-* `getCanvas()`:        
-It return the canvas node inside glImage.     
-You can append it (`getCanvas()`) in DOM for showing.
-But you can not draw `getCanvas()` in another canvas.   
-because it is `preserveDrawingBuffer: false` inside.      
-Please use the above 2 methods instead. 
+* `getCanvas()`: get the result canvas element which store the result image;      
+* `getImageData()`: get the ImageData from result canvas element;     
+* `toDataULR(type?, quality?)`: get the data url from result canvas element;    
 
+You can use the result canvas in any way you like. 
 
 # usage
 
@@ -116,7 +112,7 @@ async function processSingle(imageSrc) {
     'brightness': 0.3,
     'saturation': -0.7
   });
-  return glImage.getDataURL();
+  return glImage.getCanvas();
 }
 
 async function batchProcess(imageSrcList) {
@@ -134,13 +130,10 @@ batchProcess(imageSrcList).then((result) => {
 
 ```
 
-# Notice  
-1. For performance consideration, it is using `preserveDrawingBuffer: false` mode inside.       
-So if you cannot get image data ( or data url) from canvas node.          
-Please use `getImageData()` or `getDataURL()` api to get the output image data or data url.  
+# Notice:
+`getDataURL()` is retired.       
+Please call `getCanvas()` instead.
+You can get the result 2D canvas element which store the result, then you can do anything on this canvas in any way you like.
 
-2. you can use `setDataURLOptions(format, quality)` before `applyFilter(s)` to specify the data url.
-* format: 'image/jpeg' | 'image/png'    
-* quality: number, equal or less than 1, greater than 0.    
-It is consistent with the canvas.toDataURL specification.  
+
 

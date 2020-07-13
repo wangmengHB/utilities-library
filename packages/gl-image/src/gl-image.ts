@@ -16,6 +16,7 @@ export default class GLImage {
 
   private gl: WebGLRenderingContext | null;
   private canvas: HTMLCanvasElement;
+  
   private width: number = 0;
   private height: number = 0;
   private texture: WebGLTexture | null;
@@ -25,84 +26,66 @@ export default class GLImage {
   private tempFramebuffers: any[] = [];
   private currentFramebufferIndex = 0;
 
-  // for output result.
-  private base64: string;
-  private dataURLFormat: 'image/jpeg' | 'image/png' = 'image/png';
-  private dataURLQuality: number = 0.92;
-  private imageData?: ImageData;
+  // because of preserveDrawingBuffer is false, so it is not convient for outside usage
+  // this _resultCanvas is a 2D context canvas, it store the result for usage. 
+  private _resultCanvas: HTMLCanvasElement;
+  private _ctx2D: CanvasRenderingContext2D;
+
 
   constructor() {
     this.canvas = document.createElement('canvas');
+    this._resultCanvas = document.createElement('canvas');
     this.setupFilters();  
   }
-
-  setDataURLOptions(dataURLFormat?: string, dataURLQuality?: number) {
-    if (dataURLFormat === 'image/jpeg' || dataURLFormat === 'image/png') {
-      this.dataURLFormat = dataURLFormat;
-      if (typeof dataURLQuality === 'number' && dataURLQuality <= 1) {
-        this.dataURLQuality = dataURLQuality;
-      }
-    }
+  
+  getCanvas() {
+    return this._resultCanvas;
   }
 
-  getDataURL() {
-    return this.base64;
+  toDataURL(type: string | undefined, quality: any) {
+    return this._resultCanvas.toDataURL(type, quality);
   }
 
   getImageData() {
-    return this.imageData;
-  }
-
-  getCanvas() {
-    return this.canvas;
+    return this._ctx2D?.getImageData(0, 0, this.width, this.height);
   }
 
   
   /*
    return an ImageData for other canvas2D drawing
+    
   */
-  private generateImageData(): ImageData | undefined {
-    if (!this.gl) {
-      return undefined;
-    }
-    const { width, height } = this;
-    const pixels = new Uint8Array( width * height * 4);
-    this.gl.readPixels(0, 0, width, height, this.gl.RGBA, this.gl.UNSIGNED_BYTE, pixels);
+  // private generateImageData(): ImageData | undefined {
+  //   if (!this.gl) {
+  //     return undefined;
+  //   }
+  //   const { width, height } = this;
+  //   const pixels = new Uint8Array( width * height * 4);
+  //   this.gl.readPixels(0, 0, width, height, this.gl.RGBA, this.gl.UNSIGNED_BYTE, pixels);
 
-    // FLIP Y Axis
-    const halfHeight = Math.floor(height / 2);  // the | 0 keeps the result an int
-    const bytesPerRow = width * 4;
+  //   // FLIP Y Axis
+  //   const halfHeight = Math.floor(height / 2);  // the | 0 keeps the result an int
+  //   const bytesPerRow = width * 4;
 
-    // make a temp buffer to hold one row
-    const temp = new Uint8Array(width * 4);
-    for (let y = 0; y < halfHeight; ++y) {
-      let topOffset = y * bytesPerRow;
-      let bottomOffset = (height - y - 1) * bytesPerRow;
+  //   // make a temp buffer to hold one row
+  //   const temp = new Uint8Array(width * 4);
+  //   for (let y = 0; y < halfHeight; ++y) {
+  //     let topOffset = y * bytesPerRow;
+  //     let bottomOffset = (height - y - 1) * bytesPerRow;
 
-      // make copy of a row on the top half
-      temp.set(pixels.subarray(topOffset, topOffset + bytesPerRow));
+  //     // make copy of a row on the top half
+  //     temp.set(pixels.subarray(topOffset, topOffset + bytesPerRow));
 
-      // copy a row from the bottom half to the top
-      pixels.copyWithin(topOffset, bottomOffset, bottomOffset + bytesPerRow);
+  //     // copy a row from the bottom half to the top
+  //     pixels.copyWithin(topOffset, bottomOffset, bottomOffset + bytesPerRow);
 
-      // copy the copy of the top half row to the bottom half 
-      pixels.set(temp, bottomOffset);
-    }
-    return new ImageData(new Uint8ClampedArray(pixels), width, height);
-  }
+  //     // copy the copy of the top half row to the bottom half 
+  //     pixels.set(temp, bottomOffset);
+  //   }
+  //   return new ImageData(new Uint8ClampedArray(pixels), width, height);
+  // }
 
-
-
-  async fetchBlob() {
-    const p = new Promise((resolve) => {
-      this.canvas.toBlob(blob => {
-        resolve(blob);
-      })
-    })
-    const blob = await Promise.resolve(p);
-    return blob;
-  }
-
+  
   // from loaded image element
   fromLoadedImage(img: HTMLIFrameElement) {
     if (!(img instanceof HTMLImageElement)) {
@@ -185,8 +168,8 @@ export default class GLImage {
       setUniforms(this.gl as WebGLRenderingContext, item.program, item.uniforms);
       this.drawScene(item.program as WebGLProgram, index);
     });
-    this.imageData = this.generateImageData();
-    this.base64 = this.canvas.toDataURL(this.dataURLFormat, this.dataURLQuality);
+    // save the result in another canvas.
+    this._ctx2D.drawImage(this.canvas, 0, 0);
   }
 
   private clear() {
@@ -222,8 +205,9 @@ export default class GLImage {
 
 
   private initImage(img: HTMLImageElement) {
-    this.width = this.canvas.width = img.width;
-    this.height = this.canvas.height = img.height;
+    this.width = this._resultCanvas.width = this.canvas.width = img.width;
+    this.height = this._resultCanvas.height = this.canvas.height = img.height;
+    this._ctx2D = this._resultCanvas.getContext('2d') as CanvasRenderingContext2D;
     const glOptions = {
       alpha: true,
       premultipliedAlpha: false,

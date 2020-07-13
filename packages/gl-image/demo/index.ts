@@ -49,16 +49,14 @@ glImage.loadImageSrc(TEST_IMAGE).then(() => {
       // test if the output is correct in another event loop.
       setTimeout(() => {
         // copy image to another canvas
-        const imgData = glImage.getImageData() as ImageData;
+        const resultCanvas = glImage.getCanvas();
         const canvas = document.createElement('canvas');
-        canvas.height = imgData.height;
-        canvas.width = imgData.width;
+        canvas.height = resultCanvas.height;
+        canvas.width = resultCanvas.width;
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-        ctx.putImageData(imgData, 0, 0);
-
-        // ctx.drawImage(glImage.getCanvas(), 0, 0);
+        ctx.drawImage(resultCanvas, 0, 0);
         document.body.appendChild(canvas);
-      }, 10)
+      }, 0)
       
 
     });

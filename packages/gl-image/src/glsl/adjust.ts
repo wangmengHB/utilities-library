@@ -203,6 +203,7 @@ void main() {
  * texSize: [this.width, this.height]
  */
 export const GLSL_FS_pixelate1 = `
+precision highp float;
 uniform sampler2D texture;
 uniform vec2 center;
 uniform float scale;
@@ -247,7 +248,35 @@ void main() {
 
 
 
+/**
+ * choose right value of image percentage to blur with
+ * @returns {Array} a numeric array with delta values
+     
+chooseRightDelta: function() {
+var blurScale = 1, delta = [0, 0], blur;
+if (this.horizontal) {
+    if (this.aspectRatio > 1) {
+    // image is wide, i want to shrink radius horizontal
+    blurScale = 1 / this.aspectRatio;
+    }
+}
+else {
+    if (this.aspectRatio < 1) {
+    // image is tall, i want to shrink radius vertical
+    blurScale = this.aspectRatio;
+    }
+}
+blur = blurScale * this.blur * 0.12;
+if (this.horizontal) {
+    delta[0] = blur;
+}
+else {
+    delta[1] = blur;
+}
+return delta;
+},
 
+*/
 
 
 
