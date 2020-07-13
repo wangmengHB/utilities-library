@@ -4,6 +4,7 @@ import {
 } from "./gl-utils"
 import { createFilter, SUPPORTED_FILTERS } from './filter';
 import { loadImage, isImageLoaded } from 'web-util-kit';
+import { GL_OPTIONS } from './const';
 
 
 
@@ -14,8 +15,8 @@ export interface FilterValues {
 
 export default class GLImage {
 
-  private gl: WebGLRenderingContext | null;
   private canvas: HTMLCanvasElement;
+  private gl: WebGLRenderingContext | null;
   
   private width: number = 0;
   private height: number = 0;
@@ -33,8 +34,17 @@ export default class GLImage {
 
 
   constructor() {
-    this.canvas = document.createElement('canvas');
     this._resultCanvas = document.createElement('canvas');
+    this._ctx2D = this._resultCanvas.getContext('2d') as CanvasRenderingContext2D;
+    this.canvas = document.createElement('canvas');
+    try {
+      this.gl = (
+        this.canvas.getContext('webgl', GL_OPTIONS) ||
+        this.canvas.getContext('experimental-webgl', GL_OPTIONS)
+      ) as WebGLRenderingContext;
+    } catch (e) {
+      throw new Error('This browser does not support WebGL');
+    }
     this.setupFilters();  
   }
   
@@ -47,7 +57,7 @@ export default class GLImage {
   }
 
   getImageData() {
-    return this._ctx2D?.getImageData(0, 0, this.width, this.height);
+    return this._ctx2D.getImageData(0, 0, this.width, this.height);
   }
 
   
@@ -85,7 +95,7 @@ export default class GLImage {
   //   return new ImageData(new Uint8ClampedArray(pixels), width, height);
   // }
 
-  
+
   // from loaded image element
   fromLoadedImage(img: HTMLIFrameElement) {
     if (!(img instanceof HTMLImageElement)) {
@@ -175,54 +185,43 @@ export default class GLImage {
   private clear() {
     this.tempFramebuffers = [];
     this.currentFramebufferIndex = 0;
-    if (this.gl) {
-      this.gl.clearColor(0, 0, 0, 0);
-      this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-      if (this.texture) {
-        this.gl.deleteTexture(this.texture);   
-        this.texture = null;
-      }
-      // clean programs in the filters
-      this.filters.forEach((filter: any) => {
-        if (filter.program) {
-          this.gl!.deleteProgram(filter.program);
-          filter.program = null;
-        }
-        if (filter.vertexShader) {
-          this.gl!.deleteShader(filter.vertexShader);
-          filter.vertexShader = null;
-        }
-        if (filter.fragmentShader) {
-          this.gl!.deleteShader(filter.fragmentShader);
-          filter.fragmentShader = null;
-        }
-      });
-      this.gl.deleteBuffer(this.vertexBuffer);
-      this.vertexBuffer = null;
-      this.gl = null;
+    if (!this.gl) {
+      return;
     }
+
+    this.gl.clearColor(0, 0, 0, 0);
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    if (this.texture) {
+      this.gl.deleteTexture(this.texture);   
+      this.texture = null;
+    }
+    // clean programs in the filters
+    this.filters.forEach((filter: any) => {
+      if (filter.program) {
+        this.gl!.deleteProgram(filter.program);
+        filter.program = null;
+      }
+      if (filter.vertexShader) {
+        this.gl!.deleteShader(filter.vertexShader);
+        filter.vertexShader = null;
+      }
+      if (filter.fragmentShader) {
+        this.gl!.deleteShader(filter.fragmentShader);
+        filter.fragmentShader = null;
+      }
+    });
+    this.gl.deleteBuffer(this.vertexBuffer);
+    this.vertexBuffer = null;
+    
   }
 
 
   private initImage(img: HTMLImageElement) {
     this.width = this._resultCanvas.width = this.canvas.width = img.width;
     this.height = this._resultCanvas.height = this.canvas.height = img.height;
-    this._ctx2D = this._resultCanvas.getContext('2d') as CanvasRenderingContext2D;
-    const glOptions = {
-      alpha: true,
-      premultipliedAlpha: false,
-      depth: false,
-      stencil: false,
-      antialias: false,
-      preserveDrawingBuffer: false,
-    };
-    try {
-      this.gl = (
-        this.canvas.getContext('webgl', glOptions) ||
-        this.canvas.getContext('experimental-webgl', glOptions)
-      ) as WebGLRenderingContext;
-    } catch (e) {
-      throw new Error('This browser does not support WebGL');
+
+    if (!this.gl) {
+      throw new Error('WebGL context does not exist!');
     }
 
     this.gl.clearColor(0, 0, 0, 0);
