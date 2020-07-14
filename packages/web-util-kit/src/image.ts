@@ -1,13 +1,15 @@
-
+/*
+  return a Promise< loaded image >.
+*/
 export function loadImage(imgSrc: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const img: HTMLImageElement = new Image();
-    img.onload = () => {
-      resolve(img)
-    }
-    img.onerror = () => {
-      reject(new Error(`image load error! src: ${imgSrc}`))
-    }
+    img.addEventListener('load', () => {
+      resolve(img);
+    })
+    img.addEventListener('error', () => {
+      reject(new Error(`image load error! src: ${imgSrc}`));
+    });
     img.src = imgSrc
   });
 }
@@ -21,6 +23,25 @@ export function isImageLoaded(img: HTMLImageElement) {
   }
   return false;
 }
+
+/*
+  return a Promise< loaded image >.
+*/
+export function loadFromImage(img: HTMLImageElement): Promise<HTMLImageElement> { 
+  return new Promise((resolve, reject) => {
+    if (isImageLoaded(img)) {
+      resolve(img);
+      return;
+    }
+    img.addEventListener('load', () => {
+      resolve(img);
+    })
+    img.addEventListener('error', () => {
+      reject(new Error(`image load error! src: ${img.src}`));
+    });
+  });
+}
+
 
 /**
  * Change base64 to blob

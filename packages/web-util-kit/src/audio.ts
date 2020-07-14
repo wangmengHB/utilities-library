@@ -19,6 +19,7 @@ export class AudioBufferLoader {
     request.responseType = "arraybuffer";
     
 
+
     return new Promise((resolve, reject) => {
       request.onload = () => {
         // Asynchronously decode the audio file data in request.response
