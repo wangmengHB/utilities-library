@@ -179,8 +179,8 @@ void main() {
   float blockW = pixelate_block_size * pixelate_step_w;
   float blockH = pixelate_block_size * pixelate_step_h;
   vec4 color;
-
-  if (pixelate_block_size <= 0.0) {
+  
+  if (pixelate_block_size <= 0.0 || blockW <= 0.0 || blockH <= 0.0) {
     color = texture2D(texture, texCoord);  
   } else {
     int posX = int(texCoord.x / blockW);

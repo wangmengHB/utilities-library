@@ -133,14 +133,18 @@ export default class GLImage {
   }
 
   draw() {
-    if (!this.gl) {
+    if (!this.gl || !this.texture) {
       return;
     }
     this.gl.viewport(0, 0, this.width, this.height);
     this.filters.forEach((item: any, index: number) => {
       (this.gl as WebGLRenderingContext).useProgram(item.program);
 
-      if (item.uniforms.pixelate_step_w && item.uniforms.pixelate_step_h) {
+      if (
+        item.uniforms.pixelate_step_w && item.uniforms.pixelate_step_h &&
+        this.width > 0 &&
+        this.height > 0
+      ) {
         item.uniforms.pixelate_step_w.value = 1 / this.width;
         item.uniforms.pixelate_step_h.value = 1 / this.height;
       }

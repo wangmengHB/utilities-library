@@ -29,6 +29,7 @@ const state = {
   pixelate_block_size: 0,
 };
 
+glImage.applyFilters(state);
 
 glImage.loadFromElement(image).then(() => {
   const gui: any = new dat.GUI();
