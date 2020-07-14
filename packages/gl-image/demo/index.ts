@@ -4,9 +4,9 @@ const dat = require('dat.gui');
 const glImage = new GLImage();
 
 // test image
-const TEST_IMAGE = './person.jpg';
+const TEST_IMAGE_URL = './person.jpg';
 const image = new Image();
-image.src = TEST_IMAGE;
+image.src = TEST_IMAGE_URL;
 
 
 const sourceNode = document.getElementById('source');
@@ -26,10 +26,11 @@ const state = {
   vignette_amount: 0,
   vignette_size: 0,
   noise_amount: 0,
+  pixelate_block_size: 0,
 };
 
 
-glImage.loadImageSrc(TEST_IMAGE).then(() => {
+glImage.loadFromElement(image).then(() => {
   const gui: any = new dat.GUI();
 
   ['brightness', 'contrast', 'hue', 'saturation', 'vibrance_amount'].forEach((key: string) => {
@@ -38,6 +39,12 @@ glImage.loadImageSrc(TEST_IMAGE).then(() => {
       glImage.applyFilters(state);
     });
 
+  });
+
+  ['pixelate_block_size'].forEach((key: string) => {
+    gui.add(state, key, 0, 20, 0.1).onChange(async (val: any) => {
+      glImage.applyFilters(state);
+    });
   });
 
   ['sepia_amount', 'vignette_amount', 'vignette_size', 'noise_amount'].forEach((key: string) => {

@@ -1,7 +1,7 @@
 import { numbers } from 'util-kit';
 import { UNIFORMS, UNIFORMITEM } from './filter';
 
-export function initTexture(gl: WebGLRenderingContext, image: HTMLImageElement) {
+export function createTexture(gl: WebGLRenderingContext, image: HTMLImageElement | HTMLCanvasElement) {
   let texture = gl.createTexture();
   // Y flipped
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -167,4 +167,35 @@ export function initFramebufferObject(gl: WebGLRenderingContext, width: number, 
     fbo,
     texture
   };
+}
+
+/*
+return an ImageData for other canvas2D drawing
+ 
+*/
+export function getImageData(gl: WebGLRenderingContext, width: number, height: number): ImageData {
+ 
+ const pixels = new Uint8Array( width * height * 4);
+ gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+
+ // FLIP Y Axis
+ const halfHeight = Math.floor(height / 2);  // the | 0 keeps the result an int
+ const bytesPerRow = width * 4;
+
+ // make a temp buffer to hold one row
+ const temp = new Uint8Array(width * 4);
+ for (let y = 0; y < halfHeight; ++y) {
+   let topOffset = y * bytesPerRow;
+   let bottomOffset = (height - y - 1) * bytesPerRow;
+
+   // make copy of a row on the top half
+   temp.set(pixels.subarray(topOffset, topOffset + bytesPerRow));
+
+   // copy a row from the bottom half to the top
+   pixels.copyWithin(topOffset, bottomOffset, bottomOffset + bytesPerRow);
+
+   // copy the copy of the top half row to the bottom half 
+   pixels.set(temp, bottomOffset);
+ }
+ return new ImageData(new Uint8ClampedArray(pixels), width, height);
 }

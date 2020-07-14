@@ -165,8 +165,8 @@ void main() {
  * @filter         pixelate
  * @description    pixelate the image.
  * @param pixelate_block_size   0 to 100 (0 for no effect, 100 for maximum noise)
- * @param pixelate_step_w   1 / image Width
- * @param pixelate_step_h   1 / image Height
+ * @param pixelate_step_w   1 / image Width, fixed value
+ * @param pixelate_step_h   1 / image Height, fixed value
  */
 export const GLSL_FS_pixelate = `
 precision highp float;
@@ -178,12 +178,19 @@ varying vec2 texCoord;
 void main() {
   float blockW = pixelate_block_size * pixelate_step_w;
   float blockH = pixelate_block_size * pixelate_step_h;
-  int posX = int(texCoord.x / blockW);
-  int posY = int(texCoord.y / blockH);
-  float fposX = float(posX);
-  float fposY = float(posY);
-  vec2 squareCoords = vec2(fposX * blockW, fposY * blockH);
-  vec4 color = texture2D(texture, squareCoords);
+  vec4 color;
+
+  if (pixelate_block_size <= 0.0) {
+    color = texture2D(texture, texCoord);  
+  } else {
+    int posX = int(texCoord.x / blockW);
+    int posY = int(texCoord.y / blockH);
+    float fposX = float(posX);
+    float fposY = float(posY);
+    vec2 squareCoords = vec2(fposX * blockW, fposY * blockH);
+    color = texture2D(texture, squareCoords);
+  }
+
   gl_FragColor = color;
 }
 `
@@ -202,7 +209,7 @@ void main() {
  * scale: scale,
  * texSize: [this.width, this.height]
  */
-export const GLSL_FS_pixelate1 = `
+export const GLSL_FS_pixelate2 = `
 precision highp float;
 uniform sampler2D texture;
 uniform vec2 center;

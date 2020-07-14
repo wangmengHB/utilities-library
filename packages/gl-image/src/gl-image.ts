@@ -1,9 +1,9 @@
 import { 
-  initTexture, initVertex, initFilter, initShaders,
+  createTexture, initVertex, initFilter, initShaders,
   initFramebufferObject, setUniforms
 } from "./gl-utils"
 import { createFilter, SUPPORTED_FILTERS } from './filter';
-import { loadImage, isImageLoaded } from 'web-util-kit';
+import { loadImage, loadFromImage } from 'web-util-kit';
 import { GL_OPTIONS } from './const';
 
 
@@ -60,58 +60,25 @@ export default class GLImage {
     return this._ctx2D.getImageData(0, 0, this.width, this.height);
   }
 
-  
-  /*
-   return an ImageData for other canvas2D drawing
-    
-  */
-  // private generateImageData(): ImageData | undefined {
-  //   if (!this.gl) {
-  //     return undefined;
-  //   }
-  //   const { width, height } = this;
-  //   const pixels = new Uint8Array( width * height * 4);
-  //   this.gl.readPixels(0, 0, width, height, this.gl.RGBA, this.gl.UNSIGNED_BYTE, pixels);
-
-  //   // FLIP Y Axis
-  //   const halfHeight = Math.floor(height / 2);  // the | 0 keeps the result an int
-  //   const bytesPerRow = width * 4;
-
-  //   // make a temp buffer to hold one row
-  //   const temp = new Uint8Array(width * 4);
-  //   for (let y = 0; y < halfHeight; ++y) {
-  //     let topOffset = y * bytesPerRow;
-  //     let bottomOffset = (height - y - 1) * bytesPerRow;
-
-  //     // make copy of a row on the top half
-  //     temp.set(pixels.subarray(topOffset, topOffset + bytesPerRow));
-
-  //     // copy a row from the bottom half to the top
-  //     pixels.copyWithin(topOffset, bottomOffset, bottomOffset + bytesPerRow);
-
-  //     // copy the copy of the top half row to the bottom half 
-  //     pixels.set(temp, bottomOffset);
-  //   }
-  //   return new ImageData(new Uint8ClampedArray(pixels), width, height);
-  // }
-
-
-  // from loaded image element
-  fromLoadedImage(img: HTMLIFrameElement) {
-    if (!(img instanceof HTMLImageElement)) {
-      throw new Error('img must be an image element!');
-    }
-    if (!isImageLoaded(img)) {
-      throw new Error('img must be loaded already!');
-    }
+  async loadImageSrc(src: string) {
+    const img: HTMLImageElement = await loadImage(src);
     this.clear();
-    this.initImage(img);
+    this.initImage(img);   
     this.draw();
     return this;
   }
 
-  async loadImageSrc(src: string) {
-    const img: HTMLImageElement = await loadImage(src);
+  async loadFromElement(target: HTMLImageElement | HTMLCanvasElement) {
+    let img;
+    if (target instanceof HTMLCanvasElement) {
+      img = target;
+    } else if (target instanceof HTMLImageElement) {
+      img = await loadFromImage(target);
+    }
+    if (!img) {
+      throw new Error('failed to load source, it must be an image or canvas.')
+    }
+
     this.clear();
     this.initImage(img);   
     this.draw();
@@ -148,6 +115,9 @@ export default class GLImage {
       const uniforms = item.uniforms || {};
       const types = Object.keys(uniforms);
       types.forEach((type: string) => {
+        if (['pixelate_step_w', 'pixelate_step_h'].indexOf(type) > -1) {
+          return;
+        }
         res[type] = uniforms[type].value;
       })
     })
@@ -216,7 +186,7 @@ export default class GLImage {
   }
 
 
-  private initImage(img: HTMLImageElement) {
+  private initImage(img: HTMLImageElement | HTMLCanvasElement) {
     this.width = this._resultCanvas.width = this.canvas.width = img.width;
     this.height = this._resultCanvas.height = this.canvas.height = img.height;
 
@@ -226,7 +196,7 @@ export default class GLImage {
 
     this.gl.clearColor(0, 0, 0, 0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-    this.texture = initTexture(this.gl, img) as WebGLTexture;
+    this.texture = createTexture(this.gl, img) as WebGLTexture;
     this.vertexBuffer = initVertex(this.gl);
     this.filters.forEach((item: any) => {
       initShaders(this.gl as WebGLRenderingContext, item);
@@ -258,7 +228,7 @@ export default class GLImage {
     this.filters.push(createFilter('vibrance'));
     this.filters.push(createFilter('vignette'));
     this.filters.push(createFilter('noise'));
-    // this.filters.push(createFilter('pixelate'));
+    this.filters.push(createFilter('pixelate'));
   }
 
   private drawScene(program: WebGLProgram, index: number) {

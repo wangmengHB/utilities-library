@@ -37,6 +37,7 @@ glImage.loadImageSrc(src).then(() => {
 | vignette_amount    | 0                 | [0, 1]      | 
 | vignette_size      | 0                 | [0, 1]      | 
 | noise_amount      | 0                 | [0, 1]      | 
+| pixelate_block_size | 0               | [0, 20]     |
 
 
 default value in the above table means no filter effect.
@@ -53,8 +54,9 @@ import GLImage from 'gl-image';
 const glImage = new GLImage();
 ```
 In most cases, one GLImage instance is enough for usage, you don't need create a new one to handle another image.   
-## 1. load image from url
-*  `async loadImageSrc(url)`  
+## 1. load source image from image/canvas/url 
+*  `async loadFromElement(source: HTMLImageElement | HTMLCanvasElement)`
+*  `async loadImageSrc(url: string)`  
 
 ## 2. do filter action
 * `applyFilter(filterName, filterValue)`    
@@ -135,5 +137,6 @@ batchProcess(imageSrcList).then((result) => {
 Please call `getCanvas()` instead.
 You can get the result 2D canvas element which store the result, then you can do anything on this canvas in any way you like.
 
+`fromLoadedImage()` is retired. please use `loadFromElement` instead. 
 
 

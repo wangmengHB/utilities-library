@@ -107,12 +107,12 @@ export const SUPPORTED_FILTERS: any = Object.freeze({
         range: [0, 100],
       },
       'pixelate_step_w': {
-        value: 0.00000000001,
-        range: [0.00000000001, 1],
+        value: 0,
+        range: [0, 1],
       },
       'pixelate_step_h': {
-        value: 0.00000000001,
-        range: [0.00000000001, 1],
+        value: 0,
+        range: [0, 1],
       },
     },
   },
