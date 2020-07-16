@@ -3,14 +3,16 @@
   "version": "0.0.3-rc.1",
   "description": "collection of utility functions only works in web browser",
   "main": "lib/index.js",
-  "module": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "module": "esm/index.js",
+  "typings": "esm/index.d.ts",
   "files": [
-    "dist",
-    "lib"
+    "lib",
+    "esm"
   ],
   "scripts": {
-    "build": "rm -rf dist && rm -rf lib && tsc --outDir './lib'",
+    "build:commonjs": "rm -rf lib && tsc --module 'CommonJS' --outDir './lib'",
+    "build:esm": "rm -rf esm && tsc --target 'ESNext' --module 'ESNext' --outDir './esm'",
+    "build": "npm run build:commonjs & npm run build:esm",
     "prepublish": "npm run build"
   },
   "repository": {
