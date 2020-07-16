@@ -71,3 +71,20 @@ export function getElementStyle(element: HTMLElement, attr: string) {
   let style: any = (window as any).document.defaultView.getComputedStyle(element, null);
   return style ? style[attr] : undefined;
 }
+
+
+export function setElementStyle(element: HTMLElement, styles: CSSStyleDeclaration | string) {
+  if ( !(element instanceof HTMLElement) || !styles) {
+    return;
+  }
+  if (typeof styles === 'string') {
+    element.style.cssText += ';' + styles;
+    return;
+  }
+
+  const elementStyle = element.style;
+  for (let property in styles) {
+    elementStyle[property] = styles[property];
+  }
+
+}

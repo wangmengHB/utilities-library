@@ -1,6 +1,6 @@
 {
   "name": "web-util-kit",
-  "version": "0.0.3",
+  "version": "0.0.3-rc.1",
   "description": "collection of utility functions only works in web browser",
   "main": "lib/index.js",
   "module": "lib/index.js",
