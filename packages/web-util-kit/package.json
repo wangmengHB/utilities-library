@@ -1,6 +1,6 @@
 {
   "name": "web-util-kit",
-  "version": "0.0.3-rc.1",
+  "version": "0.0.3-rc.2",
   "description": "collection of utility functions only works in web browser",
   "main": "lib/index.js",
   "module": "esm/index.js",
@@ -37,5 +37,8 @@
     "ts-node": "^8.4.1",
     "typescript": "^3.6.4",
     "rimraf": "^2.2.8"
+  },
+  "dependencies": {
+    "util-kit": "^0.0.0-rc.11"
   }
 }
