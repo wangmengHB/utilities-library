@@ -84,7 +84,7 @@ export function getElementStyle(element: HTMLElement, attr: string): string | un
 }
 
 
-export function setElementStyle(element: HTMLElement, styles: CSSStyleDeclaration | string) {
+export function setElementStyle(element: HTMLElement, styles: any | string) {
   if ( !(element instanceof HTMLElement) || !styles) {
     return;
   }
@@ -93,9 +93,9 @@ export function setElementStyle(element: HTMLElement, styles: CSSStyleDeclaratio
     return;
   }
 
-  const elementStyle = element.style;
+  const elementStyle: CSSStyleDeclaration = element.style;
   for (let property in styles) {
-    elementStyle[property] = styles[property];
+    elementStyle[property as any] = styles[property] as any;
   }
 
 }

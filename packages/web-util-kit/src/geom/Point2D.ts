@@ -109,6 +109,20 @@ export class Point2D{
     return this;
   }
 
+
+  addSelf(other: Point2D | number ) {
+    if (typeof other === 'number' && !Number.isNaN(other) && Number.isFinite(other) ) {
+      this.x += other;
+      this.y += other;
+    }  
+    if (other instanceof Point2D) {
+      this.x += other.x;
+      this.y += other.y;
+    }
+    return this;
+  }
+
+
   /**
    * Subtracts another point from this point and returns a new one
    * @param {Point2D | number} other
@@ -126,6 +140,18 @@ export class Point2D{
   }
 
 
+  subSelf(other: Point2D | number): Point2D {
+    if (typeof other === 'number' && !Number.isNaN(other) && Number.isFinite(other) ) {
+      this.x -= other;
+      this.y -= other;
+    }
+    if (other instanceof Point2D) {
+      this.x -= other.x;
+      this.y -= other.y;
+    }
+    return this;
+  }
+
   /*
   因为 二维向量的叉乘结果得到是 z 轴方向的向量，没办法用 2D point 表示。
   所以 mul / div 目前支持标量的乘除，
@@ -141,6 +167,14 @@ export class Point2D{
     return new Point2D(this.x * scalar, this.y * scalar);
   }
 
+
+  mulSelf(scalar: number): Point2D {
+    this.x *= scalar;
+    this.y *= scalar;
+    return this;
+  }
+
+
   /**
    * Divides this point by a value and returns a new one
    * TODO: rename in scalarDivide in 2.0
@@ -149,6 +183,13 @@ export class Point2D{
    */
   div(scalar: number): Point2D {
     return new Point2D(this.x / scalar, this.y / scalar);
+  }
+
+
+  divSelf(scalar: number): Point2D {
+    this.x /= scalar;
+    this.y /= scalar;
+    return this;
   }
 
   /**
