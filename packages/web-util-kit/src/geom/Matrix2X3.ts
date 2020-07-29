@@ -21,6 +21,11 @@ export interface TRANSFORM_OPTION {
   flipY: boolean;
 }
 
+const PI_BY_180 = Math.PI / 180;
+
+export const radianToDegree = (radian: number) => radian / PI_BY_180;
+export const degreeToRadian = (degree: number) => degree * PI_BY_180;
+
 export function getIdentityMatrix2X3(): Matrix2X3Array {
   return [1, 0, 0, 1, 0, 0 ];
 }
@@ -39,7 +44,7 @@ export function getIdentityTransformOption(): TRANSFORM_OPTION {
   };
 }
 
-export function getMatrix2X3ArrayFromDOMMatrix(a: DOMMatrix): Matrix2X3Array {
+export function getArrayFromDOMMatrix(a: DOMMatrix): Matrix2X3Array {
   return [a.a, a.b, a.c, a.d, a.e, a.f];
 }
 
@@ -63,6 +68,32 @@ export function composeMatrix2X3(options: TRANSFORM_OPTION): Matrix2X3Array {
 }
 
 
+
+
+/**
+ * Decomposes standard 2x3 matrix into transform components
+ * @static
+ * @memberOf fabric.util
+ * @param  {Array} a transformMatrix
+ * @return {Object} Components of transform
+ */
+// function qrDecompose: (a) {
+//   var angle = atan2(a[1], a[0]),
+//       denom = pow(a[0], 2) + pow(a[1], 2),
+//       scaleX = sqrt(denom),
+//       scaleY = (a[0] * a[3] - a[2] * a[1]) / scaleX,
+//       skewX = atan2(a[0] * a[2] + a[1] * a [3], denom);
+//   return {
+//     angle: angle / PiBy180,
+//     scaleX: scaleX,
+//     scaleY: scaleY,
+//     skewX: skewX / PiBy180,
+//     skewY: 0,
+//     translateX: a[4],
+//     translateY: a[5]
+//   };
+// }
+
 /**
  * Decomposes standard 2x3 matrix into transform components
  * suppose skewY = 0, then decompse the matrix equation: 
@@ -71,18 +102,31 @@ export function composeMatrix2X3(options: TRANSFORM_OPTION): Matrix2X3Array {
  * a[0] * a[3] - a[2] * a[1] === scaleX * scaleY
  * a[0] * a[2] + a[1] * a[3] === (scaleX) ^ 2 * tan(skewX)
  * a[0] ^ 2 + a[1] ^ 2 === (scaleX) ^ 2
+ * 
+ * 应该避免除数为 0 的解法
  */
 export function decomposeMatrix2X3(a: Matrix2X3Array): TRANSFORM_OPTION {
   const angle = Math.atan2(a[1], a[0]);
+  // 这种计算非常危险， angle 为 0
+  const denom = Math.pow(a[0], 2) + Math.pow(a[1], 2);
+  if (denom === 0) {
+    console.error(`can not decompose this matrix: [${a.toString()}]`);
+  }
+
+  // scaleX = sqrt(denom),
+  // scaleY = (a[0] * a[3] - a[2] * a[1]) / scaleX,
+  // skewX = atan2(a[0] * a[2] + a[1] * a [3], denom);
+
+
+
   const scaleX = a[1] / Math.sin(angle);
-  const scaleY = (a[0] * a[3] - a[2] * a[1]) / scaleX;  
-  // const tanSkewX = (a[0] * a[2] + a[1] * a[3]) / (Math.pow(a[0], 2) + Math.pow(a[1], 2));
+  const scaleY = (a[0] * a[3] - a[2] * a[1]) / scaleX;
   const skewX = Math.atan2(a[0] * a[2] + a[1] * a[3], Math.pow(a[0], 2) + Math.pow(a[1], 2));
   return {
-    angle: angle,
+    angle: radianToDegree(angle),
     scaleX: Math.abs(scaleX),
     scaleY: Math.abs(scaleY),
-    skewX: skewX,
+    skewX: radianToDegree(skewX),
     skewY: 0,
     flipX: scaleX > 0? false: true,
     flipY: scaleY > 0? false: true,
@@ -141,16 +185,31 @@ export function transformPoint2D(
 
 /**
  * Invert transformation t
- * 求逆变换矩阵, 计算过程待证明？
+ * 求逆变换矩阵：
+ * 证明过程：
+ * 1. 将原矩阵拆分为两个矩阵：变换矩阵 A * 平移矩阵 B
+ * 因为平移矩阵的逆矩阵形式很简单 -dx, -dy, 最终的逆矩阵结果 B' * A'
+ * 2. 求 A 的逆矩阵 A‘ （A * A‘） === E，(A' * A) === E
+ * 3. 求出 A’ 矩阵变换后的平移点 
+ * 4. 两个组合就是逆矩阵 
  * @param {Array} t The transform
  * @return {Array} The inverted transform
  */
 export function invertMatrix2X3(t: Matrix2X3Array): Matrix2X3Array {
+  // A 矩阵的秩
+  if (t[0] * t[3] - t[1] * t[2] === 0) {
+    console.error(`Bad Case: matrix rank is 0: [${t.toString()}]`);
+  }
   const a = 1 / (t[0] * t[3] - t[1] * t[2]);
+  // A 矩阵的逆矩阵 [a,b,c,d]' = (1/|A|) * [d,-c,-b,a]
   const r: Matrix2X3Array = [a * t[3], -a * t[1], -a * t[2], a * t[0], 0, 0];
-  const o: Point2D = transformPoint2D( new Point2D(t[4], t[5]), r, true);
-  r[4] = -o.x;
-  r[5] = -o.y;
+  // 通过方程可以得到如下：
+  r[4] = -a * (t[3] * t[4] - t[2] * t[5]);
+  r[5] = -a * (-t[1] * t[4] + t[0] * t[5]);
+  // 效果等效于：
+  // const o: Point2D = transformPoint2D( new Point2D(t[4], t[5]), r, true);
+  // r[4] = -o.x;
+  // r[5] = -o.y;
   return r;
 }
 
@@ -170,8 +229,9 @@ export function calcRotateMatrix2X3(options: TRANSFORM_OPTION): Matrix2X3Array {
   if (!options.angle) {
     return getIdentityMatrix2X3();
   }
-  const cos = Math.cos(options.angle);
-  const sin = Math.sin(options.angle);
+  const radian = degreeToRadian(options.angle);
+  const cos = Math.cos(radian);
+  const sin = Math.sin(radian);
   return [cos, sin, -sin, cos, 0, 0];
 }
 
@@ -199,15 +259,17 @@ export function calcDimensionsMatrix2X3(options: TRANSFORM_OPTION): Matrix2X3Arr
   ];
       
   if (options.skewX) {
+    const radianX = degreeToRadian(options.skewX);
     scaleMatrix = multiplyMatrix2X3(
       scaleMatrix,
-      [1, 0, Math.tan(options.skewX), 1, 0, 0]
+      [1, 0, Math.tan(radianX), 1, 0, 0]
     );
   }
   if (options.skewY) {
+    const radianY = degreeToRadian(options.skewY);
     scaleMatrix = multiplyMatrix2X3(
       scaleMatrix,
-      [1, Math.tan(options.skewY), 0, 1, 0, 0],
+      [1, Math.tan(radianY), 0, 1, 0, 0],
     );
   }
   return scaleMatrix;
@@ -218,8 +280,9 @@ export function calcDimensionsMatrix2X3(options: TRANSFORM_OPTION): Matrix2X3Arr
  * Rotates `vector` with `angle` (radian unit)
  */
 export function rotateVector2D(vector: Point2D, angle: number): Point2D {
-  let sin = Math.sin(angle),
-      cos = Math.cos(angle),
+  const radian = degreeToRadian(angle);
+  let sin = Math.sin(radian),
+      cos = Math.cos(radian),
       rx = vector.x * cos - vector.y * sin,
       ry = vector.x * sin + vector.y * cos;
   return new Point2D({
