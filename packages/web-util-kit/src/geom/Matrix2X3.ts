@@ -9,7 +9,7 @@ export type Matrix2X3Array = [
   number    // dy
 ];
 
-export interface TRANSFORM_OPTION {
+export interface TRANSFORM_OPTIONS {
   angle: number;
   scaleX: number;
   scaleY: number;
@@ -30,7 +30,7 @@ export function getIdentityMatrix2X3(): Matrix2X3Array {
   return [1, 0, 0, 1, 0, 0 ];
 }
 
-export function getIdentityTransformOption(): TRANSFORM_OPTION {
+export function getIdentityTransformOptions(): TRANSFORM_OPTIONS {
   return {
     angle: 0,
     scaleX: 1,
@@ -54,7 +54,7 @@ export function getArrayFromDOMMatrix(a: DOMMatrix): Matrix2X3Array {
  * the one returned from qrDecompose, useful also if you want to calculate some
  * transformations from an object that is not enlived yet
  */
-export function composeMatrix2X3(options: TRANSFORM_OPTION): Matrix2X3Array {
+export function composeMatrix2X3(options: TRANSFORM_OPTIONS): Matrix2X3Array {
   let matrix: Matrix2X3Array = [1, 0, 0, 1, options.translateX || 0, options.translateY || 0];
   if (options.angle) {
     matrix = multiplyMatrix2X3(matrix, calcRotateMatrix2X3(options));
@@ -72,30 +72,6 @@ export function composeMatrix2X3(options: TRANSFORM_OPTION): Matrix2X3Array {
 
 /**
  * Decomposes standard 2x3 matrix into transform components
- * @static
- * @memberOf fabric.util
- * @param  {Array} a transformMatrix
- * @return {Object} Components of transform
- */
-// function qrDecompose: (a) {
-//   var angle = atan2(a[1], a[0]),
-//       denom = pow(a[0], 2) + pow(a[1], 2),
-//       scaleX = sqrt(denom),
-//       scaleY = (a[0] * a[3] - a[2] * a[1]) / scaleX,
-//       skewX = atan2(a[0] * a[2] + a[1] * a [3], denom);
-//   return {
-//     angle: angle / PiBy180,
-//     scaleX: scaleX,
-//     scaleY: scaleY,
-//     skewX: skewX / PiBy180,
-//     skewY: 0,
-//     translateX: a[4],
-//     translateY: a[5]
-//   };
-// }
-
-/**
- * Decomposes standard 2x3 matrix into transform components
  * suppose skewY = 0, then decompse the matrix equation: 
  * a[0] === cos(angle) * scaleX
  * a[1] === sin(angle) * scaleX
@@ -103,25 +79,20 @@ export function composeMatrix2X3(options: TRANSFORM_OPTION): Matrix2X3Array {
  * a[0] * a[2] + a[1] * a[3] === (scaleX) ^ 2 * tan(skewX)
  * a[0] ^ 2 + a[1] ^ 2 === (scaleX) ^ 2
  * 
- * 应该避免除数为 0 的解法
+ * avoid divider is zero!
  */
-export function decomposeMatrix2X3(a: Matrix2X3Array): TRANSFORM_OPTION {
+export function decomposeMatrix2X3(a: Matrix2X3Array): TRANSFORM_OPTIONS {
   const angle = Math.atan2(a[1], a[0]);
-  // 这种计算非常危险， angle 为 0
   const denom = Math.pow(a[0], 2) + Math.pow(a[1], 2);
   if (denom === 0) {
     console.error(`can not decompose this matrix: [${a.toString()}]`);
   }
-
-  // scaleX = sqrt(denom),
-  // scaleY = (a[0] * a[3] - a[2] * a[1]) / scaleX,
-  // skewX = atan2(a[0] * a[2] + a[1] * a [3], denom);
-
-
-
-  const scaleX = a[1] / Math.sin(angle);
+  // it is dangerous to calculate like this: 
+  // const scaleX = a[1] / Math.sin(angle);
+  // so change it to as below:
+  const scaleX = Math.sign(a[1]) * Math.sign(Math.sin(angle)) * Math.sqrt(denom);
   const scaleY = (a[0] * a[3] - a[2] * a[1]) / scaleX;
-  const skewX = Math.atan2(a[0] * a[2] + a[1] * a[3], Math.pow(a[0], 2) + Math.pow(a[1], 2));
+  const skewX = Math.atan2(a[0] * a[2] + a[1] * a[3], denom);
   return {
     angle: radianToDegree(angle),
     scaleX: Math.abs(scaleX),
@@ -198,7 +169,7 @@ export function transformPoint2D(
 export function invertMatrix2X3(t: Matrix2X3Array): Matrix2X3Array {
   // A 矩阵的秩
   if (t[0] * t[3] - t[1] * t[2] === 0) {
-    console.error(`Bad Case: matrix rank is 0: [${t.toString()}]`);
+    console.error(`Can not invert this matrix because its rank is 0: [${t.toString()}]`);
   }
   const a = 1 / (t[0] * t[3] - t[1] * t[2]);
   // A 矩阵的逆矩阵 [a,b,c,d]' = (1/|A|) * [d,-c,-b,a]
@@ -225,7 +196,7 @@ export function invertMatrix2X3(t: Matrix2X3Array): Matrix2X3Array {
  * @param  {Number} [options.angle] angle in degrees
  * @return {Number[]} transform matrix
  */
-export function calcRotateMatrix2X3(options: TRANSFORM_OPTION): Matrix2X3Array {
+export function calcRotateMatrix2X3(options: TRANSFORM_OPTIONS): Matrix2X3Array {
   if (!options.angle) {
     return getIdentityMatrix2X3();
   }
@@ -243,10 +214,10 @@ export function calcRotateMatrix2X3(options: TRANSFORM_OPTION): Matrix2X3Array {
  * transformations from an object that is not enlived yet.
  * is called DimensionsTransformMatrix because those properties are the one that influence
  * the size of the resulting box of the object.
- * @param  {TRANSFORM_OPTION} options
+ * @param  {TRANSFORM_OPTIONS} options
  * @return {Matrix2X3Array} transform matrix
  */
-export function calcDimensionsMatrix2X3(options: TRANSFORM_OPTION): Matrix2X3Array {
+export function calcDimensionsMatrix2X3(options: TRANSFORM_OPTIONS): Matrix2X3Array {
   const scaleX = typeof options.scaleX === 'undefined' ? 1 : options.scaleX;
   const scaleY = typeof options.scaleY === 'undefined' ? 1 : options.scaleY;
   let scaleMatrix: Matrix2X3Array = [
@@ -342,11 +313,11 @@ export function makeBoundingBoxFromPoints(points: Array<Point2D>, transform: Mat
  * @memberOf fabric.util
  * @param {Number} width
  * @param {Number} height
- * @param {TRANSFORM_OPTION} options
+ * @param {TRANSFORM_OPTIONS} options
  * @return {Object.width} width of containing
  * @return {Object.height} height of containing
  */
-export function sizeAfterTransform(width: number, height: number, options: TRANSFORM_OPTION) {
+export function sizeAfterTransform(width: number, height: number, options: TRANSFORM_OPTIONS) {
   const dimX = width / 2, dimY = height / 2;
   const points = [
     {
