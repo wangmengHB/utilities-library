@@ -1,6 +1,6 @@
 {
   "name": "util-kit",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "this is an util library full of collection from other awesome open source project.",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -37,5 +37,5 @@
     "ts-node": "^8.4.1",
     "typescript": "^3.6.4"
   },
-  "gitHead": "22143c8c8af6f66d4f5e1a149c6247bde01773ae"
+  "gitHead": "9dab5d6e246a7a38b0a2b2de54474004bb217cda"
 }
