@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wangmengHB/utilities-library/tree/master/package/web-util-kit.git"
+    "url": "git+https://github.com/wangmengHB/utilities-library.git"
   },
   "keywords": [
     "web",
@@ -26,9 +26,9 @@
   "author": "Meng Wang <wangmeng_hb@163.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wangmengHB/utilities-library/tree/master/package/web-util-kit/issues"
+    "url": "https://github.com/wangmengHB/utilities-library/issues"
   },
-  "homepage": "https://github.com/wangmengHB/utilities-library/tree/master/package/web-util-kit#readme",
+  "homepage": "https://github.com/wangmengHB/utilities-library/tree/master/packages/web-util-kit#readme",
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.3",
