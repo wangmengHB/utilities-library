@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wangmengHB/gl-image.git"
+    "url": "git+https://github.com/wangmengHB/utilities-library/tree/master/package/gl-image.git"
   },
   "keywords": [
     "image",
@@ -28,9 +28,9 @@
   "author": "Meng Wang <wangmeng_hb@163.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wangmengHB/gl-image/issues"
+    "url": "https://github.com/wangmengHB/utilities-library/tree/master/package/gl-image/issues"
   },
-  "homepage": "https://github.com/wangmengHB/gl-image#readme",
+  "homepage": "https://github.com/wangmengHB/utilities-library/tree/master/package/gl-image#readme",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
