@@ -1,6 +1,6 @@
 {
   "name": "node-util-kit",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "collection of utility function only works in node env.",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -37,7 +37,7 @@
     "typescript": "^3.6.4"
   },
   "dependencies": {
-    "util-kit": "^0.0.6"
+    "util-kit": "^0.0.7"
   },
   "gitHead": "22143c8c8af6f66d4f5e1a149c6247bde01773ae"
 }

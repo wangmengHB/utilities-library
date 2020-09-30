@@ -1,6 +1,6 @@
 {
   "name": "gl-image",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "image filter utils based on webgl",
   "main": "lib/index.js",
   "module": "esm/index.js",
@@ -62,8 +62,8 @@
     "webpack-dev-server": "^3.1.5"
   },
   "dependencies": {
-    "util-kit": "^0.0.6",
-    "web-util-kit": "^0.0.6"
+    "util-kit": "^0.0.7",
+    "web-util-kit": "^0.0.7"
   },
   "gitHead": "22143c8c8af6f66d4f5e1a149c6247bde01773ae"
 }
