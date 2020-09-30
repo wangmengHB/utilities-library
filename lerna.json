@@ -2,5 +2,19 @@
   "packages": [
     "packages/*"
   ],
-  "version": "0.0.1"
+  "version": "independent",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "*.md",
+        "*.txt",
+        "test/**",
+        "**/test/**",
+        "codemods/**"
+      ]
+    }
+  },
+  "registry": "https://www.npmjs.com"
 }
