@@ -1,5 +1,5 @@
 
-document.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
 
     const root = document.getElementById('test_root');
 
