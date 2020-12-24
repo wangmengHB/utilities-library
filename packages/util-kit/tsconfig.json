@@ -10,27 +10,27 @@
 		"strictBindCallApply": true,
 		"strictNullChecks": true,
 		"forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
+    	"baseUrl": ".",
 		"paths": {
-      "src/*": ["./src/*"]
-    },
+			"src/*": ["./src/*"]
+		},
 		"moduleResolution": "node",	
 		"preserveConstEnums": true, 
-    "lib": [
-      "dom",
-      "es2020"
-    ],
-    "module": "commonjs",
-    "declaration": true,
-    "target": "es5",
-    "removeComments": false,
+		"lib": [
+			"dom",
+			"es2020"
+		],
+		"module": "commonjs",
+		"declaration": true,
+		"target": "es5",
+		"removeComments": false,
 		"sourceMap": false, 
-    "outDir": "./dist"
+		"outDir": "./dist"
 	},
 	"include": [
-    "./src/**/*"
+		"./src/**/*"
 	],
 	"exclude": [
-    "node_modules/*",
+		"node_modules/*",
 	]
 }
