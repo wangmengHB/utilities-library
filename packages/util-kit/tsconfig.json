@@ -13,7 +13,6 @@
 		"downlevelIteration": true,
     	"baseUrl": ".",
 		"paths": {
-			"src/*": ["./src/*"],
 			"vs/*": [
 				"./src/vs/*"
 			]
@@ -31,9 +30,12 @@
 		"sourceMap": false, 
 		"outDir": "./dist"
 	},
+	"ts-node": {
+		"files": true
+	},
 	"include": [
 		"./src/**/*",
-		"./typings"
+		"./typings/*"
 	],
 	"exclude": [
 		"node_modules/*"

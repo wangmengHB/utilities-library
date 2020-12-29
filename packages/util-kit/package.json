@@ -12,7 +12,7 @@
   "scripts": {
     "build": "rm -rf dist && rm -rf lib && tsc --outDir './lib' && node ./scripts/post-tsc.js",
     "prepublish": "npm run build",
-    "test": "NODE_PATH=./ mocha --ui tdd"
+    "test": "NODE_PATH=./src mocha --ui tdd"
   },
   "repository": {
     "type": "git",
@@ -31,11 +31,16 @@
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.3",
+    "@types/sinon": "^1.16.36",
     "mocha": "^6.2.2",
     "mocha-junit-reporter": "^1.23.1",
     "rimraf": "^2.2.8",
+    "sinon": "^1.17.2",
     "ts-node": "^8.4.1",
     "typescript": "^3.6.4"
+  },
+  "_moduleAliases": {
+    "vs": "src/vs"
   },
   "gitHead": "9dab5d6e246a7a38b0a2b2de54474004bb217cda"
 }

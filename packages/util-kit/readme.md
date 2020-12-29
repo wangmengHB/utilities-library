@@ -6,13 +6,20 @@ So I think What if we can reuse all this good stuff (the elegant data structure 
 
 Maybe it is a good idea, so this project (package) is created for this purpose.    
 
+The util code base from [vscode](https://github.com/microsoft/vscode):
+* src/vs/base/common
+
+unit test case:
+* src/vs/base/test/common
+
+
+# How to use it
 You can install it through npm:
 ```bash
 npm install --S util-kit
 ```
 
-# utilities Available For Usage
-
+# Utilities Available For Usage
 ## Event Emitter
 
 ```ts
