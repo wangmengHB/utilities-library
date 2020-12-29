@@ -1,6 +1,6 @@
 {
   "name": "web-util-kit",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "collection of utility functions only works in web browser",
   "main": "lib/index.js",
   "module": "esm/index.js",
@@ -39,7 +39,7 @@
     "typescript": "^3.6.4"
   },
   "dependencies": {
-    "util-kit": "^0.0.9"
+    "util-kit": "^0.1.0"
   },
   "gitHead": "9dab5d6e246a7a38b0a2b2de54474004bb217cda"
 }
