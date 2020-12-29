@@ -10,9 +10,13 @@
 		"strictBindCallApply": true,
 		"strictNullChecks": true,
 		"forceConsistentCasingInFileNames": true,
+		"downlevelIteration": true,
     	"baseUrl": ".",
 		"paths": {
-			"src/*": ["./src/*"]
+			"src/*": ["./src/*"],
+			"vs/*": [
+				"./src/vs/*"
+			]
 		},
 		"moduleResolution": "node",	
 		"preserveConstEnums": true, 
@@ -32,6 +36,6 @@
 		"./typings"
 	],
 	"exclude": [
-		"node_modules/*",
+		"node_modules/*"
 	]
 }

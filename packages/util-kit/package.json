@@ -10,7 +10,7 @@
     "lib"
   ],
   "scripts": {
-    "build": "rm -rf dist && rm -rf lib && tsc --outDir './lib'",
+    "build": "rm -rf dist && rm -rf lib && tsc --outDir './lib' && node ./scripts/post-tsc.js",
     "prepublish": "npm run build",
     "test": "NODE_PATH=./ mocha --ui tdd"
   },

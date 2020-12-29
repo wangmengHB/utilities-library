@@ -1,65 +1,64 @@
-export * from './interface';
 
 // basic data - structure
-export * from './base/functional';
-export { LinkedList } from './data-structure/linkedList';
+export * from './vs/base/common/functional';
+export { LinkedList } from './vs/base/common/linkedList';
 
-
-export * from './lifecycle/lifecycle';
+export * from './vs/base/common/lifecycle';
 
 // event and async
-export * from './event/event';
-export * from './event/cancellation';
-export * from './event/sequence';     // ? temperary useless
+export * from './vs/base/common/event';
+export * from './vs/base/common/cancellation';
+export * from './vs/base/common/sequence';     
 
 
-export { URI } from './base/uri';
+export { URI } from './vs/base/common/uri';
 
 export { 
   KeyCode, KeyCodeUtils, KeyMod, SimpleKeybinding,
   ChordKeybinding, KeyChord,  Keybinding, createKeybinding
-} from './keybinding/keyCodes';
+} from './vs/base/common/keyCodes';
 
-export { onUnexpectedError } from './debug/errors';
+export { onUnexpectedError } from './vs/base/common/errors';
 
-export { Schemas, RemoteAuthorities } from './base/network';
+export { Schemas, RemoteAuthorities } from './vs/base/common/network';
 
-export { CharCode } from './keybinding/charCode';
+export { CharCode } from './vs/base/common/charCode';
 
-export { RGBA, HSLA, HSVA, Color} from './color/color';
+export { RGBA, HSLA, HSVA, Color} from './vs/base/common/color';
 
-import * as platform from './platform';
-import { OperatingSystem } from './platform/platform';
-
-
+import * as platform from './vs/base/common/platform';
 
 // basic utils
-export { types } from './base/types';
-export { strings } from './base/strings';
-export { dates } from './base/date';
-export { numbers } from './base/numbers';
-export { arrays } from './base/arrays';
-export { objects } from './base/objects';
-export { decorators } from './base/decorators';
-
-
+import * as types from './vs/base/common/types';
+import * as strings from './vs/base/common/strings';
+import * as dates from './vs/base/common/date';
+import * as numbers from './vs/base/common/numbers';
+import * as arrays from './vs/base/common/arrays';
+import * as objects from './vs/base/common/objects';
+import * as decorators from './vs/base/common/decorators';
 
 // async utils 
-export { asyncs } from './async/async';
+import * as asyncs from './vs/base/common/async';
 
+import * as filters from './vs/base/common/filters';
 
-
-import * as filters from './base/filters';
-
-export { generateUuid } from './utils/uuid';
+export { generateUuid } from './vs/base/common/uuid';
 
 
 
 
 export {
-  platform, OperatingSystem,
+  platform, 
   
-  filters
+  filters,
+  types,
+  strings,
+  dates,
+  numbers,
+  arrays,
+  objects,
+  decorators,
+  asyncs,
 
 };
 
