@@ -36,7 +36,7 @@ import {
 Actually it does not do much work in disposable itself, it should be considered as sth like coding rule in vscode. 
 For details, you can easily find the interface in typescript environment. 
 
-## 2. [Event ( Emitter )](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/01.%20event.md)
+## 2. [Event ( Emitter )](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/event.md)
 
 The event-related utils can be found in `util-kit` as below: 
 ```ts
@@ -66,7 +66,7 @@ The Event (Emitter) in vscode has the following features:
 	* Event.debounce
 
 
-For detail documents, Please view [Event(Emitter) document](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/01.%20event.md).
+For details, Please view [Event (Emitter) document](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/event.md).
 
 
 ## 2. objects

@@ -12,20 +12,22 @@ import {
 ```
 
 The Event (Emitter) in vscode has the following features:    
-1. [Emitter ( Emitter/PauseableEmitter/AsyncEmitter )](#1-emitter) : 
-	* No Event Name Concept				
-	* Handling Exception in event handler		
-	* In-Order delivery, especially in the scenarior of firing event in handler       
-2. [PauseableEmitter (extends Emitter)](#2-pausableemitter-extends-emitter)	
-3. AsyncEmitter (extends Emitter)	
-4. EventMultiplexer ( an util class for emitter)
-5. EventBufferer ( an util class for emitter)	
-6. Event Utils ( util functions under the namespace `Event`)
-	* Event.buffer, 
-	* Event.once, 
-	* Event.stopwatch, 
-	* Event.fromPromise,
-	* Event.debounce
+1. [Emitter](#1-emitter) ( Emitter/PauseableEmitter/AsyncEmitter ) : 
+	* [No Event Name Concept](#11-no-event-name-concept)				
+	* [Handling Exception](#12-handling-exception-in-event-handler)		
+	* [In-Order delivery](#13-in-order-delivery), especially in the scenarior of firing event in handler
+	* [main interface in Emitter](#14-main-interface-in-emitter)
+2. [PauseableEmitter](#2-pausableemitter-extends-emitter) (extends Emitter)	
+3. [AsyncEmitter]((#3-asyncemitter-extends-emitter)) (extends Emitter)		
+4. [EventMultiplexer](#4-eventmultiplexer) ( an util class for emitter)
+5. [EventBufferer](#5-eventbufferer) ( an util class for emitter)	
+6. [Event Utils](#6-event-utils) ( util functions under the namespace `Event`)
+	* [Event.buffer](#61-eventbuffer)
+	* [Event.latch](#62-eventlatch) 
+	* [Event.once](#63-eventonce) 
+	* [Event.stopwatch](#64-eventstopwatch) 
+	* [Event.fromPromise](#65-eventfrompromise)
+	* [Event.debounce](#66-eventdebounce)
 
 ## 1. Emitter
 ### 1.1. No Event Name Concept
@@ -422,7 +424,10 @@ console.log('count should be 3 ', count);
 Event is a namespace, there are some util function in this namespace, mainly used to wrap the `emitter.event` function, to make it has some special features: such as buffer, latch, once, debounce, stopwatch, fromPromise.
 
 
-### 6.1. Event.buffer<T>(emitter.event, isNextTick = false, initData: T[] = [])
+### 6.1. Event.buffer
+```ts
+export function buffer<T>(event: Event<T>, nextTick = false, _buffer: T[] = []): Event<T>
+```
 Buffers the provided event until a first listener comes along, at which point fire all the events at once and pipe the event from then on.	
 * emitter.event: or other event function.			
 * isNextTick: whether to fire in the next tick.		
