@@ -1,11 +1,22 @@
 # Event Emitter
 
-The Event Emitter in vscode has the following features:    
-1. Emitter ( Emitter/PauseableEmitter/AsyncEmitter ) : 
+The event-related utils can be found in `util-kit` as below: 
+```ts
+import { 
+	Emitter, PauseableEmitter, AsyncEmitter,
+	EventBufferer, EventMultiplexer, 
+	Event, 
+	CancellationToken, asyncs,
+	IWaitUntil,
+} from 'util-kit';
+```
+
+The Event (Emitter) in vscode has the following features:    
+1. [Emitter ( Emitter/PauseableEmitter/AsyncEmitter )](#1-emitter) : 
 	* No Event Name Concept				
 	* Handling Exception in event handler		
 	* In-Order delivery, especially in the scenarior of firing event in handler       
-2. PauseableEmitter (extends Emitter)	
+2. [PauseableEmitter (extends Emitter)](#2-pausableemitter-extends-emitter)	
 3. AsyncEmitter (extends Emitter)	
 4. EventMultiplexer ( an util class for emitter)
 5. EventBufferer ( an util class for emitter)	
@@ -15,17 +26,6 @@ The Event Emitter in vscode has the following features:
 	* Event.stopwatch, 
 	* Event.fromPromise,
 	* Event.debounce
-
-The event-related utils can be found in `util-kit` as below: 
-```ts
-import { 
-	Emitter, PauseableEmitter, AsyncEmitter,
-	EventBufferer, EventMultiplexer, 
-	Event, 
-	CancellationToken, asyncs,
-	IWaitUntil, IDisposable, DisposableStore,   
-} from 'util-kit';
-```
 
 ## 1. Emitter
 ### 1.1. No Event Name Concept

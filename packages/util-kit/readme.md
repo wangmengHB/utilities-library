@@ -23,9 +23,33 @@ npm install --S util-kit
 ```
 
 # Available Utilities
-## 1. [Event Emitter](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/01.%20event.md)
+## 1. lifecycle ( Disposable )
+Disposable is an important concept in vscode, used to manage the lifecycle of object. `Disposable` is an abstract class, which can not be instanced. 
+So many objects in vscode are disposable. Especiallly, the event-related part use it a lot. `Dispose` has the same meaning as `destroy`. 
+ 
+```ts
+import { 
+  IDisposable, DisposableStore, dispose, isDisposable, 
+  combinedDisposable, toDisposable, 
+} from 'util-kit';
+```
+Actually it does not do much work in disposable itself, it should be considered as sth like coding rule in vscode. 
+For details, you can easily find the interface in typescript environment. 
 
-The Event Emitter in vscode has the following features:    
+## 2. [Event ( Emitter )](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/01.%20event.md)
+
+The event-related utils can be found in `util-kit` as below: 
+```ts
+import { 
+	Emitter, PauseableEmitter, AsyncEmitter,
+	EventBufferer, EventMultiplexer, 
+	Event, 
+	CancellationToken, asyncs,
+	IWaitUntil,
+} from 'util-kit';
+```
+
+The Event (Emitter) in vscode has the following features:    
 1. Emitter ( Emitter/PauseableEmitter/AsyncEmitter ) : 
 	* No Event Name Concept				
 	* Handling Exception in event handler		
@@ -41,19 +65,9 @@ The Event Emitter in vscode has the following features:
 	* Event.fromPromise,
 	* Event.debounce
 
-The event-related utils can be found in `util-kit` as below: 
-```ts
-import { 
-	Emitter, PauseableEmitter, AsyncEmitter,
-	EventBufferer, EventMultiplexer, 
-	Event, 
-	CancellationToken, asyncs,
-	IWaitUntil, IDisposable, DisposableStore,   
-} from 'util-kit';
-```
-For How to Use, Please [See details](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/01.%20event.md).
 
-```
+For detail documents, Please view [Event(Emitter) document](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/01.%20event.md).
+
 
 ## 2. objects
 ```ts
