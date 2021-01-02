@@ -58,18 +58,18 @@ The Event (Emitter) in vscode has the following features:
 3. AsyncEmitter (extends Emitter)	
 4. EventMultiplexer ( an util class for emitter)
 5. EventBufferer ( an util class for emitter)	
-6. Event Utils ( util functions under the namespace `Event`)
-	* Event.buffer, 
-	* Event.once, 
-	* Event.stopwatch, 
-	* Event.fromPromise,
-	* Event.debounce
-
+6. Event Utils ( util functions under the namespace `Event`)    
+    * Event.buffer    
+    * Event.latch     
+    * Event.once 
+    * Event.stopwatch 
+    * Event.fromPromise 
+    * Event.debounce
 
 For details, Please view [Event (Emitter) document](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/event.md).
 
 
-## 2. objects
+## 3. objects
 ```ts
 import { objects } from 'util-kit';
 const {
@@ -78,7 +78,7 @@ const {
 } = objects;
 ```
 
-## 3. numbers
+## 4. numbers
 ```ts
 import { numbers } from 'util-kit';
 const {
@@ -86,7 +86,7 @@ const {
 } = numbers;
 ```
 
-## 4. strings 
+## 5. strings 
 ```ts
 import { strings } from 'util-kit';
 const {
@@ -94,9 +94,9 @@ const {
 } = strings;
 ```
 
-## 5. dates
+## 6. dates
 
-## 6. decorators
+## 7. decorators
 ```ts
 import { decorators } from 'util-kit';
 const {

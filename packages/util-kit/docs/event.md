@@ -18,7 +18,7 @@ The Event (Emitter) in vscode has the following features:
 	* [In-Order delivery](#13-in-order-delivery), especially in the scenarior of firing event in handler
 	* [main interface in Emitter](#14-main-interface-in-emitter)
 2. [PauseableEmitter](#2-pausableemitter-extends-emitter) (extends Emitter)	
-3. [AsyncEmitter]((#3-asyncemitter-extends-emitter)) (extends Emitter)		
+3. [AsyncEmitter](#3-asyncemitter-extends-emitter) (extends Emitter)		
 4. [EventMultiplexer](#4-eventmultiplexer) ( an util class for emitter)
 5. [EventBufferer](#5-eventbufferer) ( an util class for emitter)	
 6. [Event Utils](#6-event-utils) ( util functions under the namespace `Event`)
