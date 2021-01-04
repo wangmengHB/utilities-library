@@ -5,10 +5,10 @@ const shell = require('shelljs');
 const VS_CODE_GIT = `https://github.com/microsoft/vscode.git`;
 const VS_CODE_FOLDER = path.join(__dirname, '../vscode');
 const VS_BASE_COMMON_PATH = path.join(__dirname, '../vscode/src/vs/base/common');
-const VS_BASE_COMMON_TEST_PATH = path.join(__dirname, '../vscode/src/vs/base/common');
+const VS_BASE_COMMON_TEST_PATH = path.join(__dirname, '../vscode/src/vs/base/test/common');
 
-const TARGET_COMMON_PATH = path.join(__dirname, '../src/vs/base/common');
-const TARGET_TEST_COMMON_PATH = path.join(__dirname, '../test/common');
+const TARGET_COMMON_PATH = path.join(__dirname, '../src/vs/base/');
+const TARGET_TEST_COMMON_PATH = path.join(__dirname, '../test/');
 
 if (!shell.which('git')) {
     shell.echo('Sorry, this script requires git');
@@ -40,7 +40,12 @@ if (!shell.test('-d', VS_BASE_COMMON_TEST_PATH)) {
     shell.exit(1);
 }
 
-// TODO: sync code snippet from vscode project
+shell.cp('-Rf', VS_BASE_COMMON_PATH, TARGET_COMMON_PATH);
+shell.cp('-Rf', VS_BASE_COMMON_TEST_PATH, TARGET_TEST_COMMON_PATH);
+
+// TODO: check the difference manually.
+shell.echo('You should manually check the difference before commit.');
+
 
 
 
