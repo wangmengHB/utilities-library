@@ -1,6 +1,7 @@
 const { existsSync, readFileSync, writeFileSync } = require('fs');
 const { sync } = require('globby');
 const { dirname, relative, resolve, join } = require('path');
+const shell = require('shelljs');
 
 /*
 "baseUrl": ".",
@@ -173,7 +174,8 @@ for (let i = 0; i < flen; i += 1) {
 console.log(`Replaced ${replaceCount} paths in ${changedFileCount} files`);
 
 
-// TODO remove tests in the the lib path.
 
-console.log('remove the "tests" folders in the lib folder later.')
+// shell.cp('./typings/thenable.d.ts', './lib/');
+// shell.cp('./typings/require.d.ts', './lib/');
+
 

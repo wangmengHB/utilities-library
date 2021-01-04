@@ -1,4 +1,3 @@
-
 // basic data - structure
 export * from './vs/base/common/functional';
 export { LinkedList } from './vs/base/common/linkedList';
@@ -61,5 +60,3 @@ export {
   asyncs,
 
 };
-
-
