@@ -1,10 +1,10 @@
 # util-kit
 
-util-kit is mainly from vscode's code base snippet, and it is an util npm both for browser and nodejs. What it has done have for vscode:     
-1. re-organize the exports of vscode code base snippet for easily usage as a common utility npm.    
-2. add documents and specifications for available utitilies.           
+util-kit is mainly from vscode's code base snippet, and it is an util npm both for browser and nodejs. What `util-kit` has done:     
+1. Organize the vscode snippet as a util npm can be used both on browser and nodejs. And re-organize the exports of vscode snippet for easily usage.    
+2. add documents for utitilies. For complex utitilies, documents and exmaples are provided. For other easy ones, you can easily find the interface in typescript environment.           
 
-As a fan for vscode, I think vscode is the most awesome open source front-end project I've ever seen, and its code base has realy high quality. So I think What if we can reuse all this good stuff (the elegant `data structure / algrithom / design pattern` in vscode) in our own project? Maybe it is a good idea. So I do it for my personal usage, I hope it can also help you. 
+As a fan for vscode, I think vscode is the most awesome open source front-end project I've ever seen, and its code base has realy high quality. So I think What if we can reuse all this good stuff (the elegant `data structure / algrithom / design pattern` in vscode) in our own project? Maybe it is a good idea. So `util-kit` is created fot this purpose, I hope it can be helpful.   
 
 The source code of [vscode](https://github.com/microsoft/vscode):
 * [src/vs/base/common](https://github.com/microsoft/vscode/tree/master/src/vs/base/common)
