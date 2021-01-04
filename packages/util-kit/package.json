@@ -1,17 +1,18 @@
 {
   "name": "util-kit",
   "version": "0.1.0",
-  "description": "this is an util library full of collection from other awesome open source project.",
+  "description": "An util package both for browser and nodejs, mainly reorganized from the vscode's code base snippet, and make vscode's some internal utilities available for your own project.",
   "main": "lib/index.js",
   "module": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "dist",
-    "lib"
+    "lib",
+    "typings"
   ],
   "scripts": {
     "build": "rm -rf dist && rm -rf lib && tsc --outDir './lib' && node ./scripts/post-tsc.js",
-    "prepublish": "npm run build",
+    "prepublish": "npm run test && npm run build",
     "test": "NODE_PATH=./src mocha --ui tdd",
     "sync:vscode": "node ./scripts/sync-vscode"
   },
@@ -20,8 +21,9 @@
     "url": "git+https://github.com/wangmengHB/utilities-library.git"
   },
   "keywords": [
-    "utils",
-    "util"
+    "vscode snippet",
+    "util-kit",
+    "uitilities"
   ],
   "author": "Meng Wang <wangmeng_hb@163.com>",
   "license": "MIT",
