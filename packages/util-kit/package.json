@@ -1,6 +1,6 @@
 {
   "name": "util-kit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An util package both for browser and nodejs, mainly reorganized from the vscode's code base snippet, and make vscode's some internal utilities available for your own project.",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -47,5 +47,5 @@
   "_moduleAliases": {
     "vs": "src/vs"
   },
-  "gitHead": "9dab5d6e246a7a38b0a2b2de54474004bb217cda"
+  "gitHead": "0715bc6a5a96d67256037503f9d8212d4d7e310b"
 }
