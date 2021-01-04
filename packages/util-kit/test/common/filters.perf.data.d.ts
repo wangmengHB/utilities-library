@@ -3,3 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 export const data: string[];
+export const mock: {
+    data: string[];
+};
