@@ -4,109 +4,216 @@ import { asyncs } from 'util-kit';
 const {
     createCancelablePromise, timeout, 
 } = asyncs;
-
 ```
+* createCancelablePromise
+* timeout
+* raceTimeout
+* raceCancellation
 
 
-## timeout
 
+## 1. createCancelablePromise
+It create a cancelable promise, which can cancel the `promise`, force it to be rejected. It accept a callback function as parameter. The callback function accept `token` as input (mainly used to register cancel handler if need), and it must return a promise. The `createCancelablePromise` will wrap the inner promise to be a cancelable promise, no matter the inner promise is already resolved or rejected. And the cancel happens only once.    
+After the cancelable promise is resolved or rejected without cancel, the handler on the token are all disposed immediately.       
 
+Example:
 ```ts
+const {
+    createCancelablePromise, timeout, 
+} = asyncs;
+
+let canceled = 0;
+let promise = createCancelablePromise(token => {
+    token.onCancellationRequested(_ => { canceled += 1; });
+    return new Promise(resolve => { /*never*/ });
+});
+promise.then(
+    () => console.log('never happens'), 
+    err => {
+        console.log(`onCancellationRequested is called, canceled should be 1`, canceled);
+        console.log(`err is isPromiseCanceledError: true`, isPromiseCanceledError(err));
+    }
+);
+promise.cancel();
+console.log(`canceled should be 1`, canceled);
+promise.cancel(); // cancel only once
 
 
+
+canceled = 0;
+promise = createCancelablePromise(token => {
+    token.onCancellationRequested(_ => { canceled += 1; });
+    // the inner promise is already resolved
+    return Promise.resolve(1234);
+});
+promise.then(
+    () => console.log('never happens'), 
+    (err) => {
+        console.log(`onCancellationRequested is called, canceled should be 1`, canceled);
+        console.log(`err is isPromiseCanceledError: true`, isPromiseCanceledError(err));
+    }
+);
+promise.cancel();
+console.log(`canceled should be 1`, canceled);
+
+
+const order: string[] = [];
+
+let cancellablePromise = createCancelablePromise(token => {
+    order.push('in callback');
+    token.onCancellationRequested(_ => order.push('cancelled'));
+    return Promise.resolve(1234);
+});
+
+order.push('afterCreate');
+
+promise = cancellablePromise.finally(() => order.push('finally'));
+
+cancellablePromise.cancel();
+order.push('afterCancel');
+
+console.log(`order should be ['in callback', 'afterCreate', 'cancelled', 'afterCancel']`, order);
+
+promise.then(
+    () => {},
+    () => {
+        console.log('because it is canceled, the promise is rejected.')
+        console.log(`order should be ['in callback', 'afterCreate', 'cancelled', 'afterCancel','finally']`, order);
+    }
+);
 ```
 
-
-
-
+## 2. timeout
+`timeout` is used to wrap `setTimeout` as a cancelable promise. 
 ```ts
-
-
-test('cancelablePromise - set token, don\'t wait for inner promise', function () {
-		let canceled = 0;
-		let promise = async.createCancelablePromise(token => {
-			token.onCancellationRequested(_ => { canceled += 1; });
-			return new Promise(resolve => { /*never*/ });
+export function timeout(millis: number, token?: CancellationToken): CancelablePromise<void> | Promise<void> {
+	if (!token) {
+		return createCancelablePromise(token => timeout(millis, token));
+	}
+	return new Promise((resolve, reject) => {
+		const handle = setTimeout(resolve, millis);
+		token.onCancellationRequested(() => {
+			clearTimeout(handle);
+			reject(errors.canceled());
 		});
-		let result = promise.then(_ => assert.ok(false), err => {
-			assert.equal(canceled, 1);
-			assert.ok(isPromiseCanceledError(err));
-		});
-		promise.cancel();
-		promise.cancel(); // cancel only once
-		return result;
 	});
+}
+```
 
-	test('cancelablePromise - cancel despite inner promise being resolved', function () {
-		let canceled = 0;
-		let promise = async.createCancelablePromise(token => {
-			token.onCancellationRequested(_ => { canceled += 1; });
-			return Promise.resolve(1234);
-		});
-		let result = promise.then(_ => assert.ok(false), err => {
-			assert.equal(canceled, 1);
-			assert.ok(isPromiseCanceledError(err));
-		});
-		promise.cancel();
-		return result;
+
+## 3. raceTimeout
+`raceTimeout` is used to race a promise and a certain timeout millis.
+```ts
+export function raceTimeout<T>(promise: Promise<T>, timeout: number, onTimeout?: () => void): Promise<T | undefined> {
+	let promiseResolve: ((value: T | undefined) => void) | undefined = undefined;
+
+	const timer = setTimeout(() => {
+		promiseResolve?.(undefined);
+		onTimeout?.();
+	}, timeout);
+
+	return Promise.race([
+		promise.finally(() => clearTimeout(timer)),
+		new Promise<T | undefined>(resolve => promiseResolve = resolve)
+	]);
+}
+```
+
+## 4. raceCancellation
+```ts
+export function raceCancellation<T>(promise: Promise<T>, token: CancellationToken, defaultValue?: T): Promise<T | undefined> {
+	return Promise.race([promise, new Promise<T | undefined>(resolve => token.onCancellationRequested(() => resolve(defaultValue)))]);
+}
+```
+
+## 5. retry
+```ts
+export async function retry<T>(task: ITask<Promise<T>>, delay: number, retries: number): Promise<T> {
+	let lastError: Error | undefined;
+
+	for (let i = 0; i < retries; i++) {
+		try {
+			return await task();
+		} catch (error) {
+			lastError = error;
+
+			await timeout(delay);
+		}
+	}
+
+	throw lastError;
+}
+```
+
+## 6. firstParallel
+It race promises with a `shouldStop` function, if the first match is hit, it will return the target resolved result and cancel all the promises if they are cancelable. If finally not matched, return default value.	
+```ts
+export function firstParallel<T>(promiseList: Promise<T>[], shouldStop: (t: T) => boolean = t => !!t, defaultValue: T | null = null) {
+	if (promiseList.length === 0) {
+		return Promise.resolve(defaultValue);
+	}
+
+	let todo = promiseList.length;
+	const finish = () => {
+		todo = -1;
+		for (const promise of promiseList) {
+			(promise as Partial<CancelablePromise<T>>).cancel?.();
+		}
+	};
+
+	return new Promise<T | null>((resolve, reject) => {
+		for (const promise of promiseList) {
+			promise.then(result => {
+				if (--todo >= 0 && shouldStop(result)) {
+					finish();
+					resolve(result);
+				} else if (todo === 0) {
+					resolve(defaultValue);
+				}
+			})
+			.catch(err => {
+				if (--todo >= 0) {
+					finish();
+					reject(err);
+				}
+			});
+		}
 	});
-
-	// Cancelling a sync cancelable promise will fire the cancelled token.
-	// Also, every `then` callback runs in another execution frame.
-	test('CancelablePromise execution order (sync)', function () {
-		const order: string[] = [];
-
-		const cancellablePromise = async.createCancelablePromise(token => {
-			order.push('in callback');
-			token.onCancellationRequested(_ => order.push('cancelled'));
-			return Promise.resolve(1234);
-		});
-
-		order.push('afterCreate');
-
-		const promise = cancellablePromise
-			.then(undefined, err => null)
-			.then(() => order.push('finally'));
-
-		cancellablePromise.cancel();
-		order.push('afterCancel');
-
-		return promise.then(() => assert.deepEqual(order, ['in callback', 'afterCreate', 'cancelled', 'afterCancel', 'finally']));
-	});
-
-	// Cancelling an async cancelable promise is just the same as a sync cancellable promise.
-	test('CancelablePromise execution order (async)', function () {
-		const order: string[] = [];
-
-		const cancellablePromise = async.createCancelablePromise(token => {
-			order.push('in callback');
-			token.onCancellationRequested(_ => order.push('cancelled'));
-			return new Promise(c => setTimeout(c.bind(1234), 0));
-		});
-
-		order.push('afterCreate');
-
-		const promise = cancellablePromise
-			.then(undefined, err => null)
-			.then(() => order.push('finally'));
-
-		cancellablePromise.cancel();
-		order.push('afterCancel');
-
-		return promise.then(() => assert.deepEqual(order, ['in callback', 'afterCreate', 'cancelled', 'afterCancel', 'finally']));
-	});
-
-	test('cancelablePromise - get inner result', async function () {
-		let promise = async.createCancelablePromise(token => {
-			return async.timeout(12).then(_ => 1234);
-		});
-
-		let result = await promise;
-		assert.equal(result, 1234);
-	});
-
+}
 
 ```
+
+
+## 7. Queue
+
+## 8. Limiter
+
+## TaskSequentializer
+
+## SequencerByKey
+
+## Sequence
+
+## Throttler
+
+## Delayer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ```ts
@@ -564,31 +671,6 @@ suite('Async', () => {
 		});
 	});
 
-	test('retry - success case', async () => {
-		let counter = 0;
-
-		const res = await async.retry(() => {
-			counter++;
-			if (counter < 2) {
-				return Promise.reject(new Error('fail'));
-			}
-
-			return Promise.resolve(true);
-		}, 10, 3);
-
-		assert.equal(res, true);
-	});
-
-	test('retry - error case', async () => {
-		let expectedError = new Error('fail');
-		try {
-			await async.retry(() => {
-				return Promise.reject(expectedError);
-			}, 10, 3);
-		} catch (error) {
-			assert.equal(error, error);
-		}
-	});
 
 	test('TaskSequentializer - pending basics', async function () {
 		const sequentializer = new async.TaskSequentializer();
@@ -679,44 +761,7 @@ suite('Async', () => {
 		assert.ok(pendingCancelled);
 	});
 
-	test('raceCancellation', async () => {
-		const cts = new CancellationTokenSource();
 
-		let triggered = false;
-		const p = async.raceCancellation(async.timeout(100).then(() => triggered = true), cts.token);
-		cts.cancel();
-
-		await p;
-
-		assert.ok(!triggered);
-	});
-
-	test('raceTimeout', async () => {
-		const cts = new CancellationTokenSource();
-
-		// timeout wins
-		let timedout = false;
-		let triggered = false;
-
-		const p1 = async.raceTimeout(async.timeout(100).then(() => triggered = true), 1, () => timedout = true);
-		cts.cancel();
-
-		await p1;
-
-		assert.ok(!triggered);
-		assert.equal(timedout, true);
-
-		// promise wins
-		timedout = false;
-
-		const p2 = async.raceTimeout(async.timeout(1).then(() => triggered = true), 100, () => timedout = true);
-		cts.cancel();
-
-		await p2;
-
-		assert.ok(triggered);
-		assert.equal(timedout, false);
-	});
 
 	test('SequencerByKey', async () => {
 		const s = new async.SequencerByKey<string>();
@@ -736,77 +781,7 @@ suite('Async', () => {
 		assert.equal(r3, 'hello');
 	});
 
-	test('IntervalCounter', async () => {
-		const counter = new async.IntervalCounter(10);
-		assert.equal(counter.increment(), 1);
-		assert.equal(counter.increment(), 2);
-		assert.equal(counter.increment(), 3);
-
-		await async.timeout(20);
-
-		assert.equal(counter.increment(), 1);
-		assert.equal(counter.increment(), 2);
-		assert.equal(counter.increment(), 3);
-	});
-
-	test('firstParallel - simple', async () => {
-		const a = await async.firstParallel([
-			Promise.resolve(1),
-			Promise.resolve(2),
-			Promise.resolve(3),
-		], v => v === 2);
-		assert.equal(a, 2);
-	});
-
-	test('firstParallel - uses null default', async () => {
-		assert.equal(await async.firstParallel([Promise.resolve(1)], v => v === 2), null);
-	});
-
-	test('firstParallel - uses value default', async () => {
-		assert.equal(await async.firstParallel([Promise.resolve(1)], v => v === 2, 4), 4);
-	});
-
-	test('firstParallel - empty', async () => {
-		assert.equal(await async.firstParallel([], v => v === 2, 4), 4);
-	});
-
-	test('firstParallel - cancels', async () => {
-		let ct1: CancellationToken;
-		const p1 = async.createCancelablePromise(async (ct) => {
-			ct1 = ct;
-			await async.timeout(200, ct);
-			return 1;
-		});
-		let ct2: CancellationToken;
-		const p2 = async.createCancelablePromise(async (ct) => {
-			ct2 = ct;
-			await async.timeout(2, ct);
-			return 2;
-		});
-
-		assert.equal(await async.firstParallel([p1, p2], v => v === 2, 4), 2);
-		assert.equal(ct1!.isCancellationRequested, true, 'should cancel a');
-		assert.equal(ct2!.isCancellationRequested, true, 'should cancel b');
-	});
-
-	test('firstParallel - rejection handling', async () => {
-		let ct1: CancellationToken;
-		const p1 = async.createCancelablePromise(async (ct) => {
-			ct1 = ct;
-			await async.timeout(200, ct);
-			return 1;
-		});
-		let ct2: CancellationToken;
-		const p2 = async.createCancelablePromise(async (ct) => {
-			ct2 = ct;
-			await async.timeout(2, ct);
-			throw new Error('oh no');
-		});
-
-		assert.equal(await async.firstParallel([p1, p2], v => v === 2, 4).catch(() => 'ok'), 'ok');
-		assert.equal(ct1!.isCancellationRequested, true, 'should cancel a');
-		assert.equal(ct2!.isCancellationRequested, true, 'should cancel b');
-	});
+	
 });
 
 ```

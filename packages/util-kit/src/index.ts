@@ -2,11 +2,12 @@
 export * from './vs/base/common/functional';
 export { LinkedList } from './vs/base/common/linkedList';
 
-export * from './vs/base/common/lifecycle';
 
 // event and async
+export * from './vs/base/common/lifecycle';
 export * from './vs/base/common/event';
 export * from './vs/base/common/cancellation';
+export * from './vs/base/common/async';
 export * from './vs/base/common/sequence';     
 
 
@@ -17,7 +18,7 @@ export {
   ChordKeybinding, KeyChord,  Keybinding, createKeybinding
 } from './vs/base/common/keyCodes';
 
-export { onUnexpectedError } from './vs/base/common/errors';
+export { onUnexpectedError, isPromiseCanceledError } from './vs/base/common/errors';
 
 export { Schemas, RemoteAuthorities } from './vs/base/common/network';
 

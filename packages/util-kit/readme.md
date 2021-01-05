@@ -125,6 +125,10 @@ console.log('child count should be 1', childCount);
 console.log('parent.token.isCancellationRequested should be true', parent.token.isCancellationRequested);
 ```
 
+Notice: for `CancellationTokenSource`:
+* if `dispose` immediately after created, its token always is `CancellationToken.None`
+* if `cancel` immediately after created, its token always is `CancellationToken.Cancelled`.
+
 
 ## 4. asyncs
 ```ts
