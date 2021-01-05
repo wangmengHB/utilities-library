@@ -22,7 +22,7 @@ The code base will be synced from vscode monthly.
 npm install --S util-kit
 ```
 
-# Available Utilities
+# Utilities
 ## 1. lifecycle ( Disposable )
 Disposable is an important concept in vscode, used to manage the lifecycle of object. `Disposable` is an abstract class, which can not be instanced. 
 So many objects in vscode are disposable. Especiallly, the event-related part use it a lot. `Dispose` has the same meaning as `destroy`. 
@@ -36,16 +36,14 @@ import {
 Actually it does not do much work in disposable itself, it should be considered as sth like coding rule in vscode. 
 For details, you can easily find the interface in typescript environment. 
 
-## 2. [Event ( Emitter )](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/event.md)
+## 2. [Event & Emitter ](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/event.md)
 
 The event-related utils can be found in `util-kit` as below: 
 ```ts
 import { 
 	Emitter, PauseableEmitter, AsyncEmitter,
 	EventBufferer, EventMultiplexer, 
-	Event, 
-	CancellationToken, asyncs,
-	IWaitUntil,
+	Event, IWaitUntil,
 } from 'util-kit';
 ```
 
@@ -66,10 +64,78 @@ The Event (Emitter) in vscode has the following features:
     * Event.fromPromise 
     * Event.debounce
 
-For details, Please view [Event (Emitter) document](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/event.md).
+For details, Please view [Event & Emitter document](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/event.md).
+
+## 3. CancellationToken
+```ts
+import { CancellationTokenSource, CancellationToken } from 'util-kit';
+const { isCancellationToken, None, Cancelled } = CancellationToken;
+```
+`CancellationToken` is defined as a namespace and also as an interface. 
+CancellationToken is an important concept in vscode, it is a token used to cancel a promise. The token has 2 properties:
+* isCancellationRequested: boolean, it can only be converted from `false` to `true`, can not in the reverse way.  
+* onCancellationRequested: it used to register hanlder function and return IDisposable object, the handler is called when cancel happens.   
+
+`CancellationToken.None` is a constant frozen token, representing the initial state token.  
+`CancellationToken.Cancelled` is a constant frozen token, representing the cancelled state token. For cancelled token, its `onCancellationRequested` always works as `setTimeout(fn,0)`.
+
+`CancellationTokenSource` is the object which holds the readonly token, and it can cancel the token. `CancellationTokenSource` has several features:
+1. cancel the token means the token is converted from `false` to `true`, and the handler in `source.token.onCancellationRequested` will be triggered.  
+2. cancel happens only once.         
+3. parent token will cancel children when parent is cancelled. `CancellationTokenSource` can accept a parent token as the optional parameter in constuctor.  
+4. `CancellationTokenSource` has a `dispose` method to dispose all handlers, and it accept an optional parameter to let you cancel the token first and then dispose.
+
+Example: 
+```ts
+import { CancellationTokenSource, CancellationToken } from 'util-kit';
+
+const source = new CancellationTokenSource();
+let cancelCount = 0;
+function onCancel() {
+  cancelCount += 1;
+}
+source.token.onCancellationRequested(onCancel);
+console.log(`should be false`, source.token.isCancellationRequested);
+// cancel the first time
+source.cancel();
+console.log(`count should be 1`, count);
+console.log(`should be true`, source.token.isCancellationRequested);
+// cancel the second time, nothing happens
+source.cancel();
+console.log(`count should be 1`, count);
+
+// for the token whose isCancellationRequested is true,
+// onCancellationRequested functions as setTimeout(0)
+source.token.onCancellationRequested(function() {
+  console.log('here is called as setTimeout(fn, 0)')
+});
 
 
-## 3. objects
+let parent = new CancellationTokenSource();
+let child = new CancellationTokenSource(parent.token);
+
+let childCount = 0;
+child.token.onCancellationRequested(() => childCount += 1);
+// parent cancel will cancel children
+parent.cancel();
+
+console.log('child count should be 1', childCount);
+console.log('child.token.isCancellationRequested should be true', child.token.isCancellationRequested);
+console.log('child count should be 1', childCount);
+console.log('parent.token.isCancellationRequested should be true', parent.token.isCancellationRequested);
+```
+
+
+## 4. asyncs
+```ts
+import { asyncs } from 'util-kit';
+const {
+  createCancelablePromise, 
+} = asyncs;
+```
+
+
+## 5. objects
 ```ts
 import { objects } from 'util-kit';
 const {
@@ -78,7 +144,7 @@ const {
 } = objects;
 ```
 
-## 4. numbers
+## 6. numbers
 ```ts
 import { numbers } from 'util-kit';
 const {
@@ -86,17 +152,17 @@ const {
 } = numbers;
 ```
 
-## 5. strings 
+## 7. strings 
 ```ts
 import { strings } from 'util-kit';
 const {
-  clamp, rot, Counter, MovingAverage 
+  escapeRegExpCharacters, escape, createRegExp, 
 } = strings;
 ```
 
-## 6. dates
+## 8. dates
 
-## 7. decorators
+## 9. decorators
 ```ts
 import { decorators } from 'util-kit';
 const {
@@ -104,7 +170,7 @@ const {
 } = decorators;
 ```
 
-## 7. uuid
+## 10. uuid
 
 
 
