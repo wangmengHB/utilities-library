@@ -2,22 +2,21 @@
 ```ts
 import { asyncs } from 'util-kit';
 const {
-    createCancelablePromise, timeout, Queue
+	createCancelablePromise, 
+	timeout, raceTimeout, raceCancellation, retry, sequence, 
+	Queue, Limiter, Throttler, Delayer, 
 } = asyncs;
 ```
-* createCancelablePromise
-* timeout
-* raceTimeout
-* raceCancellation
+The most common used async util is `createCancelablePromise`, it can create a cancelable promise.
 
 
-
-## 1. createCancelablePromise
+## createCancelablePromise
 It create a cancelable promise, which can cancel the `promise`, force it to be rejected. It accept a callback function as parameter. The callback function accept `token` as input (mainly used to register cancel handler if need), and it must return a promise. The `createCancelablePromise` will wrap the inner promise to be a cancelable promise, no matter the inner promise is already resolved or rejected. And the cancel happens only once.    
 After the cancelable promise is resolved or rejected without cancel, the handler on the token are all disposed immediately.       
 
 Example:
 ```ts
+import { asyncs } from 'util-kit';
 const {
     createCancelablePromise, timeout, 
 } = asyncs;
@@ -83,7 +82,7 @@ promise.then(
 );
 ```
 
-## 2. timeout
+## timeout
 `timeout` is used to wrap `setTimeout` as a cancelable promise. 
 ```ts
 export function timeout(millis: number, token?: CancellationToken): CancelablePromise<void> | Promise<void> {
@@ -101,7 +100,7 @@ export function timeout(millis: number, token?: CancellationToken): CancelablePr
 ```
 
 
-## 3. raceTimeout
+## raceTimeout
 `raceTimeout` is used to race a promise and a certain timeout millis.
 ```ts
 export function raceTimeout<T>(promise: Promise<T>, timeout: number, onTimeout?: () => void): Promise<T | undefined> {
@@ -119,14 +118,47 @@ export function raceTimeout<T>(promise: Promise<T>, timeout: number, onTimeout?:
 }
 ```
 
-## 4. raceCancellation
+## raceCancellation
 ```ts
 export function raceCancellation<T>(promise: Promise<T>, token: CancellationToken, defaultValue?: T): Promise<T | undefined> {
 	return Promise.race([promise, new Promise<T | undefined>(resolve => token.onCancellationRequested(() => resolve(defaultValue)))]);
 }
 ```
 
-## 5. retry
+## sequence
+```ts
+/**
+ * Runs the provided list of promise factories in sequential order. The returned
+ * promise will complete to an array of results from each promise.
+ */
+
+export function sequence<T>(promiseFactories: ITask<Promise<T>>[]): Promise<T[]> {
+	const results: T[] = [];
+	let index = 0;
+	const len = promiseFactories.length;
+
+	function next(): Promise<T> | null {
+		return index < len ? promiseFactories[index++]() : null;
+	}
+
+	function thenHandler(result: any): Promise<any> {
+		if (result !== undefined && result !== null) {
+			results.push(result);
+		}
+
+		const n = next();
+		if (n) {
+			return n.then(thenHandler);
+		}
+
+		return Promise.resolve(results);
+	}
+
+	return Promise.resolve(null).then(thenHandler);
+}
+```
+
+## retry
 ```ts
 export async function retry<T>(task: ITask<Promise<T>>, delay: number, retries: number): Promise<T> {
 	let lastError: Error | undefined;
@@ -184,7 +216,7 @@ export function firstParallel<T>(promiseList: Promise<T>[], shouldStop: (t: T) =
 ```
 
 
-## 7. Queue
+## Queue
 A helper to queue N promises, keeping it resolved in order, and error bubbling would not block the queue.
 `new Queue()` is equivalent with `new Limiter(1)`. 
 
@@ -219,8 +251,9 @@ queue.onFinished(() => {
 
 ```
 
-## 8. Limiter
+## Limiter
 A helper to queue N promises and run them all with a max degree of parallelism. The helper ensures that at any time no more than M promises are running at the same time.
+Notice: for max degree of parallelism greater than 1, the `onFinished` is not reliable. 
 ```ts
 let activePromises = 0;
 let factoryFactory = (n: number) => () => {
@@ -241,47 +274,6 @@ Promise.all(promises).then((res) => {
 });
 
 ```
-
- 
-
-
-
-
-
-## sequence
-```ts
-/**
- * Runs the provided list of promise factories in sequential order. The returned
- * promise will complete to an array of results from each promise.
- */
-
-export function sequence<T>(promiseFactories: ITask<Promise<T>>[]): Promise<T[]> {
-	const results: T[] = [];
-	let index = 0;
-	const len = promiseFactories.length;
-
-	function next(): Promise<T> | null {
-		return index < len ? promiseFactories[index++]() : null;
-	}
-
-	function thenHandler(result: any): Promise<any> {
-		if (result !== undefined && result !== null) {
-			results.push(result);
-		}
-
-		const n = next();
-		if (n) {
-			return n.then(thenHandler);
-		}
-
-		return Promise.resolve(results);
-	}
-
-	return Promise.resolve(null).then(thenHandler);
-}
-```
-
-
 
 ## Throttler
 Only the first and last promise task factory will be called when the current queue is not resolved.
@@ -304,7 +296,6 @@ Promise.all([
     
 });
 ```
-
 
 ## Delayer
 A helper (following the throttler) to delay execution of a task that is being requested often.

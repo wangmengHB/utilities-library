@@ -130,13 +130,18 @@ Notice: for `CancellationTokenSource`:
 * if `cancel` immediately after created, its token always is `CancellationToken.Cancelled`.
 
 
-## 4. asyncs
+## 4. async utils
+The async utils of vscode can be found in: 
 ```ts
 import { asyncs } from 'util-kit';
 const {
-  createCancelablePromise, 
+	createCancelablePromise, 
+	timeout, raceTimeout, raceCancellation, retry, sequence, 
+	Queue, Limiter, Throttler, Delayer, 
 } = asyncs;
 ```
+The most common used is `createCancelablePromise`, it can create a cancelable promise.  
+For more details, view [async utils document](https://github.com/wangmengHB/utilities-library/blob/master/packages/util-kit/docs/asyncs.md).
 
 
 ## 5. objects
